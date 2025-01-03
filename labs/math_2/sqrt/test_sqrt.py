@@ -3,20 +3,29 @@ from helper import sqrt_1, sqrt_2_with_raises, sqrt_3_with_exceptions
 
 # ---- 1 simple evaluation sqtr ---------------
 TEST_SQRT = [
-    pytest.param(-25, pytest.raises(ValueError), marks=[pytest.mark.xfail]),
-    pytest.param("string", pytest.raises(TypeError), marks=[pytest.mark.xfail]),
-    pytest.param("2 3/11", pytest.raises(Exception), marks=[pytest.mark.skip]),
     (0, 0.0),
     (4, 2.0),
     (36, 6.0),
     (36.6, 6.04979338490167),
 ]
 
-
 @pytest.mark.parametrize("x, ex_outcome", TEST_SQRT)
 def test_sqrt_1(x, ex_outcome):
     result = sqrt_1(x)
     assert result == ex_outcome
+
+TEST_SQRT_EXCEPTION = [
+    pytest.param(-25, TypeError, marks=[pytest.mark.xfail]),
+    pytest.param("string", TypeError, marks=[pytest.mark.xfail]),
+]
+@pytest.mark.parametrize("x, ex_outcome", TEST_SQRT_EXCEPTION)
+def test_sqrt_1_exception(x, ex_outcome):
+    try:
+        sqrt_1(x)
+    except ex_outcome:
+        assert True
+    except Exception:
+        assert False
 
 
 # -----2 raises with message---------------------
@@ -42,6 +51,23 @@ def test_sqrt_2_with_exceptions(x, exception, expected):
     else:
         result = sqrt_2_with_raises(x)
         assert result == expected
+
+
+# ----- new 2 raises with message---------------------
+TEST_SQRT_2_RAISES = [
+    (-25, ValueError, "Ошибка! Невозможно найти квадратный корень из отрицательного числа!"),
+    ("string", TypeError, "Ошибка! Вы забыли ввести выражение!"),
+    ('', TypeError, "Ошибка! Вы забыли ввести выражение!"),
+]
+
+
+@pytest.mark.parametrize("x, exception, expected", TEST_SQRT_2_RAISES)
+def test_sqrt_2_with_exceptions(x, exception, expected):
+    # if expect exception
+    with pytest.raises(exception) as except_info:
+        sqrt_2_with_raises(x)
+    # check exception text
+    assert str(except_info.value) == expected
 
 
 # ---------3 exception with return msg-------------

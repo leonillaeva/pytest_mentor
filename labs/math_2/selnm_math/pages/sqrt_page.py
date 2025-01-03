@@ -23,31 +23,21 @@ class SqrtPage(BasePage):
     def send_expression(self):
         self.driver.find_element(*self.SEND_BUTTON).click()
 
-    def get_outcome(self):
-        try:
-            element_outcome = WebDriverWait(self.driver, 2).until(
-                EC.presence_of_element_located(self.OUTCOME))
+    def get_outcome_numbers(self):
+        element_outcome = WebDriverWait(self.driver, 2).until(
+            EC.presence_of_element_located(self.OUTCOME))
 
-            full_text = element_outcome.text
+        full_text = element_outcome.text
 
-            match = re.findall(r"[-+]?\d*\.\d+|\d+", full_text)
-            if match:
-                return match[-1]
-        except ValueError:
-            error_element = WebDriverWait(self.driver, 2).until(
-                EC.presence_of_element_located(self.ERROR_WINDOW))
-            msg_text = error_element.text
-            return msg_text  # "Ошибка! Невозможно найти квадратный корень из отрицательного числа!"
-        except TypeError:
-            error_element = WebDriverWait(self.driver, 2).until(
-                EC.presence_of_element_located(self.ERROR_WINDOW))
-            msg_text = error_element.text
-            return msg_text  # "Ошибка! Вы ввели некорректное выражение!"
-        except Exception:
-            error_element = WebDriverWait(self.driver, 2).until(
-                EC.presence_of_element_located(self.ERROR_WINDOW))
-            msg_text = error_element.text
-            return msg_text  # "Ошибка! Вы забыли ввести выражение!"
+        match = re.findall(r"[-+]?\d*\.\d+|\d+", full_text)
+        if match:
+            return match[-1]
+
+    def get_outcome_pop_up_message(self):
+        error_element = WebDriverWait(self.driver, 2).until(
+            EC.presence_of_element_located(self.ERROR_WINDOW))
+        msg_text = error_element.text
+        return msg_text
 
 
 if __name__ == "__main__":

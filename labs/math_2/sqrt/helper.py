@@ -3,7 +3,7 @@ from typing import Union
 
 
 # ---- 1 simple evaluation sqtr ---------------
-def sqrt_1(x: int | float) -> float:
+def sqrt_1(x: Union[int, float]) -> float:
     return math.sqrt(x)
 
 
