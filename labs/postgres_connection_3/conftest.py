@@ -3,10 +3,9 @@ import psycopg2
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-# from labs.postgres_connection_3.db import Session
 
 # postgresql+psycopg2 - dialect[+driver], dialect is a database name, driver the name of a DBAPI
-CONNECTION_ROW = "postgresql://postgres:postgres@localhost:5432/mentor_postgres_test"
+CONNECTION_ROW = "postgresql+psycopg2://postgres:postgres@localhost:5432/mentor_postgres_test"
 
 
 @pytest.fixture(scope="module")

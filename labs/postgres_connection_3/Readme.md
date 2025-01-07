@@ -1,6 +1,7 @@
 # Database Testing
 1. [Database Testing: What it is, Why & Best Practices](https://testsigma.com/blog/database-testing/)
 2. [Database Testing: A Full Guide](https://katalon.com/resources-center/blog/database-testing)
+3. [Tutorial Database Testing using SQL. QATestLab](https://qatestlab.com/resources/knowledge-center/tutorial-database-testing-using-sql/)
 
 ## Types of Database Testing
 - Structural Testing
