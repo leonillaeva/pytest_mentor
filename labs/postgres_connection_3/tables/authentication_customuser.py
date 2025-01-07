@@ -1,6 +1,6 @@
-# импортируем поля
 from sqlalchemy import Boolean, Column, Integer, String, DateTime, text
-from db import Model
+from labs.postgres_connection_3.db import Model
+
 
 
 class AuthCustomer(Model):
@@ -10,7 +10,7 @@ class AuthCustomer(Model):
     first_name = Column(String)
     last_name = Column(String)
     middle_name = Column(String)
-    password_hash = Column(String)
+    password = Column(String)
     email = Column(String, index=True)
     role = Column(Integer)
 
