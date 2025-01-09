@@ -12,12 +12,12 @@ if __name__ == "__main__":
     CONNECTION_ROW = "postgresql+psycopg2://postgres:postgres@localhost:5432/mentor_postgres_test"
     engine = create_engine(CONNECTION_ROW)
 
-    # try:
-    #     connection = engine.connect()
-    #     print("Connection successful")
-    #     connection.close()
-    # except Exception as e:
-    #     print("Error connection:", e)
+    try:
+        connection = engine.connect()
+        print("Connection successful")
+        connection.close()
+    except Exception as e:
+        print("Error connection:", e)
 
     Session = sessionmaker(
         bind=engine,
