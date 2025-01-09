@@ -7,6 +7,12 @@ def test_get_data_user_by_id(db_session):
                             authentication_customuser.AuthCustomer.first_name,
                             authentication_customuser.AuthCustomer.last_name
                             ).filter(authentication_customuser.AuthCustomer.id == 20).one_or_none()
-    # print(user.id, user.first_name, user.last_name)
+    print(user.id, user.first_name, user.last_name)
     expected = (20, "New", "Lib")
     assert user == expected
+
+# def test_get_data_user_by_id(db_session):
+#     cursor = db_connection.cursor()
+#     join_table = cursor.execute("""
+#        JOIN TABLE ...""")
+#     db_connection.commit()
