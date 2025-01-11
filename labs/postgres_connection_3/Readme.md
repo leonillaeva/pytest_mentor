@@ -34,3 +34,13 @@ In the scope of this type, we focus on performance testing, load testing, stress
 ## What is ETL testing? Is ETL testing similar to database testing?
 ETL (Extract, Transform, Load) testing is a subset of database testing that focuses on verifying the data extraction, transformation, and loading processes within a data integration pipeline. ETL testing is much more specific, focusing on the data movement and transformation process, while database testing encompasses the entire range of testing activities in the database.
 
+## [PostgreSQL – Naming Conventions](https://www.geeksforgeeks.org/postgresql-naming-conventions/)
+### Basic Naming Conventions in PostgreSQL
+When creating database object names in PostgreSQL, consider the following basic conventions:
+
+1. Table Names
+- Use **plural nouns** for table names to indicate that they contain multiple records.
+- Use **snake_case** to separate words.
+2. Column Names
+- Use **descriptive** names that indicate the data being stored.
+- Use **snake_case** for consistency.
