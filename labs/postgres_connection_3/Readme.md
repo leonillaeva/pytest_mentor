@@ -44,3 +44,50 @@ When creating database object names in PostgreSQL, consider the following basic 
 2. Column Names
 - Use **descriptive** names that indicate the data being stored.
 - Use **snake_case** for consistency.
+
+## DB_API
+***Простой Python. Современный стиль программирования***. *Второе издание. Билл Любанович. 2021.Гл.16, стр 345.*
+ 
+[PEP 249 -- Python Database API Specification v2.0](https://legacy.python.org/dev/peps/pep-0249/)
+
+DB-API — это стандартный API в Python, предназначенный для получения доступа к реляционным базам данных. 
+Основные функции:
+* [connect()](https://legacy.python.org/dev/peps/pep-0249/#connection-objects) — создание соединения с бд. 
+Может включать аргументы: имя пользователя, пароль, адрес сервера и пр.;<br>
+**Connection Objects**. Connection methods: 
+1. .close(), 
+2. .commit(), 
+3. .rollback(), 
+4. .cursor()
+
+* [cursor()](https://legacy.python.org/dev/peps/pep-0249/#cursor-objects) — создание объекта курсора, предназначенного для работы с запросами;<br>
+These objects represent a database cursor, which is used to manage the context of a fetch operation.<br>
+**Cursor Objects**. Cursor methods: 
+1. .close(), 
+2. .execute(operation \[, parameters]), 
+3. .executemany( operation, seq_of_parameters ),
+4. .fetchone(),
+5. .fetchmany(\[size=cursor.arraysize]),
+6. .fetchall(),
+7. .nextset(),
+8. .arraysize
+9. .callproc( procname \[, parameters ] ) - optional, 
+
+* execute(), executemany() — запуск одной или нескольких команд SQL. *Метод курсора.*
+[Prepare and execute a database operation (query or command)](https://legacy.python.org/dev/peps/pep-0249/#id15)
+* fetchone(), fetchmany(), fetchall() — получение результатов функции execute(). *Метод курсора.*
+
+## DDL
+- CREATE DATABASE db
+- USE db
+- DROP DATABASE db
+- CREATE TABLE tbl_name(id INT, count INT)
+- DROP TABLE tbl_name
+- TRUNCATE TABLE tbl_name - удаление всех строк таблицы
+
+## DML, CRUD акроним
+- Create - INSERT
+- Read - SELECT
+- Update - UPDATE
+- Delete - DELETE
+

@@ -1,8 +1,6 @@
 from sqlalchemy import create_engine
-
 from sqlalchemy import select
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.sql import exists
 from sqlalchemy import asc, desc
 # from db import session
 # import tables
