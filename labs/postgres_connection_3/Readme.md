@@ -176,6 +176,17 @@ with engine.connect() as connection:<br>
 *--Close pool connections*<br>
 engine.dispose()<br>
 
+## Commands
+| Command         | Flag           | Description          |
+|-----------------|----------------|----------------------|
+| pytest          | -----          | Runs all tests       |
+| pytest -m smoke | -m smoke       | Runs smoke tests     |
+|pytest -m "not smoke"| -m "not smoke" | Excludes smoke tests |
+|pytest tests\test_schema.py| -----          | CLI                  |
+|pytest tests\test_schema.py::TestDbSchema| ----           | --Runs class         |
+|pytest tests\test_schema.py::TestAuthenticationCustomuserSchema::test_get_count_column_names| ----           | Runs test in class   |
+
+
 
 
 
