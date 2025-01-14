@@ -1,3 +1,4 @@
+import pytest
 from labs.postgres_connection_3.tables.helper_db_schema import DbSchema, PUBLIC_TABLES
 
 AUTHENTICATION_CUSTOMUSER_COLUMNS = ['last_login', 'first_name', 'last_name', 'middle_name', 'email', 'password',
@@ -24,28 +25,43 @@ class TestDbSchema:
         # print(count)
         assert count == 14, "ERROR! Expected 14 tables"
 
+    @pytest.mark.smoke
     def test_get_names_public_tables(self, db_session):
         schema = DbSchema(db_session)
         tables = schema.get_names_public_tables()
         assert len(tables) == 14, "14 tables"
         assert set(PUBLIC_TABLES).issubset(set(tables)), "ERROR! All names of the PUBLIC_TABLES should be in the tables"
 
+    @pytest.mark.skip(reason="names of the tables are not in plural")
+    def test_check_names_public_tables_plural(self, db_session):
+        plural_names = ['authentication_customusers', 'authors_authors', 'authors_authors_books',
+                        'books_books', 'orders_orders']
+        schema = DbSchema(db_session)
+        tables_names = schema.check_names_public_tables_plural()
+        assert len(tables_names) == 14, "14 tables"
+        assert plural_names[0] in tables_names, "ERROR! Name of table should be in plural"
+        assert plural_names[1] in tables_names
+        assert plural_names[2] in tables_names
+        assert plural_names[3] in tables_names
+        assert plural_names[4] in tables_names
+
 
 # AUTHENTICATION_CUSTOMUSER
 class TestAuthenticationCustomuserSchema:
 
-    def test_get_count_column_names_authentication_customuser(self, db_session):
+    def test_get_count_column_names(self, db_session):
         schema = DbSchema(db_session)
         count = schema.get_count_column_names('authentication_customuser')
         assert count == 13, "ERROR! Expected 13 number of columns in 'authentication_customuser'"
 
-    def test_get_column_names_authentication_customuser(self, db_session):
+    @pytest.mark.smoke
+    def test_get_column_names(self, db_session):
         schema = DbSchema(db_session)
         columns = schema.get_column_names('authentication_customuser')
         assert len(columns) == 13
         assert set(columns) == set(AUTHENTICATION_CUSTOMUSER_COLUMNS), "ERROR! Columns are not matched"
 
-    def test_get_column_types_authentication_customuser(self, db_session):
+    def test_get_column_types(self, db_session):
         schema = DbSchema(db_session)
         column_types = schema.get_column_types('authentication_customuser')
         assert column_types['last_login'] == timestamp_zone
@@ -62,13 +78,14 @@ class TestAuthenticationCustomuserSchema:
         assert column_types['is_staff'] == boolean
         assert column_types['is_superuser'] == boolean
 
-    def test_get_nullable_columns_yes_authentication_customuser(self, db_session):
+    def test_get_nullable_columns_yes(self, db_session):
         schema = DbSchema(db_session)
         nullable_columns = schema.get_nullable_columns_yes('authentication_customuser')
         assert len(nullable_columns) == 1
         assert nullable_columns['last_login'] == null_yes, "ERROR! Expected null column is 'last_login"
 
-    def test_get_nullable_columns_no_authentication_customuser(self, db_session):
+    @pytest.mark.smoke
+    def test_get_nullable_columns_no(self, db_session):
         schema = DbSchema(db_session)
         not_nullable_columns = schema.get_nullable_columns_no('authentication_customuser')
         assert len(not_nullable_columns) == 12
@@ -92,6 +109,7 @@ class TestAuthenticationCustomuserSchema:
         assert constraints['authentication_customuser_pkey'] == 'id'
         assert constraints['authentication_customuser_email_key'] == 'email'
 
+    @pytest.mark.smoke
     def test_get_constraint_type_primary_key(self, db_session):
         schema = DbSchema(db_session)
         pk_constraint = schema.get_constraint_type_primary_key('authentication_customuser')
