@@ -37,6 +37,14 @@ class DbSchema:
         # print(result)
         return [row[0] for row in result]
 
+    def check_names_public_tables_plural(self):
+        query = """SELECT table_name 
+                    FROM information_schema.tables 
+                    WHERE table_schema = :schema;"""
+        result = self.session.execute(text(query), {'schema': self.__table_schema__}).fetchall()
+        # print(result)
+        return [row[0] for row in result]
+
     def get_count_column_names(self, table_name):
         query = """SELECT COUNT(column_name) 
                    FROM information_schema.columns 
@@ -51,6 +59,7 @@ class DbSchema:
         result = self.session.execute(text(query),
                                       {'schema': self.__table_schema__, 'table': table_name}).fetchall()
         return [row[0] for row in result]
+
 
     def get_column_types(self, table_name):
         query = """SELECT column_name, data_type 
