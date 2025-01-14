@@ -22,6 +22,10 @@ SELECT column_name, data_type
 FROM information_schema.columns
 WHERE table_schema = 'public' AND table_name = 'authentication_customuser';
 
+SELECT column_name, data_type
+FROM information_schema.columns
+WHERE table_schema = 'public' AND table_name = 'author_author';
+
 
 -- number of columns in authentication_customuser
 SELECT COUNT(column_name) AS number_columns

@@ -60,7 +60,6 @@ class DbSchema:
                                       {'schema': self.__table_schema__, 'table': table_name}).fetchall()
         return [row[0] for row in result]
 
-
     def get_column_types(self, table_name):
         query = """SELECT column_name, data_type 
                    FROM information_schema.columns 
