@@ -77,7 +77,7 @@ These objects represent a database cursor, which is used to manage the context o
 [Prepare and execute a database operation (query or command)](https://legacy.python.org/dev/peps/pep-0249/#id15)
 * fetchone(), fetchmany(), fetchall() — получение результатов функции execute(). *Метод курсора.*
 
-## DDL
+### DDL
 - CREATE DATABASE db
 - USE db
 - DROP DATABASE db
@@ -85,9 +85,97 @@ These objects represent a database cursor, which is used to manage the context o
 - DROP TABLE tbl_name
 - TRUNCATE TABLE tbl_name - удаление всех строк таблицы
 
-## DML, CRUD акроним
+### DML, CRUD акроним
 - Create - INSERT
 - Read - SELECT
 - Update - UPDATE
 - Delete - DELETE
+
+## SQLAlchemy
+***Простой Python. Современный стиль программирования***. *Второе издание. Билл Любанович. 2021.Гл.16, стр 349.*
+DB-API дает ограниченный набор возможностей.
+
+SQLAlchemy самая популярная библиотека для работы с разными бд.
+
+Использовать SQLAlchemy можно на нескольких уровнях:
+1. ***движок SQLAlchemy*** — самый низкий уровень управляет пулами соединений с бд, 
+выполняет команды SQL и возвращает результат. Это ближе всего к DB-API.
+- import sqlalchemy as sa
+- conn = sa.create_engine('sqlite://)
+- conn.execute("""CREATE ...""")
+2. ***язык выражений SQL*** — позволяет выражать запросы более Python-ориентированным способом.
+- import sqlalchemy as sa
+- conn = sa.create_engine('sqlite://)
+- meta = sa.MetaData()
+- zoo = sa.Table('zoo', meta, sa.Column('critter', sa.String, primary_key=True)), sa.Column(...)
+
+*---------- объект zoo промежуточное звено между SQL и Python*
+- meta.create_all(conn)
+- conn.execute(zoo.insert('bear', 2, 1000.0))
+- result = conn.execute(zoo.select())
+- rows = result.fetchall() - получить результат
+3. ***SQLAlchemy ORM*** — самый высокий уровень. Это ORM (Object Relational Model — объектно-реляционная модель), 
+использует язык выражений SQL Expression Language и связывает код приложения с реляционными структурами данных. 
+
+Старается сделать реальные механизмы бд невидимыми.
+
+Вы определяете классы, а ORM обрабатывает способ, с помощью которого они получают данные из бд и возвращают их обратно.
+Основная идея, на которой базируется термин "объектно-реляционное отображение", заключается в том, что можно ссылаться
+на объекты в коде и придерживаться таким образом принципов работы с Python, но при этом использовать реляционную бд.
+*******************************************
+import sqlalchemy as sa<br>
+from sqlalchemy.orm import declarative_base<br>
+
+conn = sa.create_engine('sqlite:///zoo.db') - использовать файл zoo.db<br>
+
+Base = declarative_base()<br>
+
+class Zoo(Base):<br>
+
+&emsp;\r__tablename__ = 'zoo'<br>
+&emsp;critter = sa.Column('critter', sa.String, primary_key=True))<br>
+&emsp;count = sa.Column('count', sa.Integer)<br><br>
+
+&emsp;def \r__init__(self, critter, count):<br>
+&emsp;&emsp;self.critter = critter<br>
+&emsp;&emsp;self.count = count<br>
+
+&emsp;def \r__repr__(self):<br>
+&emsp;&emsp; return "<Zoo({}, {},)>".format(self.critter, self.critter)<br>
+
+
+Base.metadata.create_all(conn) - создает бд<br><br>
+
+**** *coздаем сессию для коммуникации с бд* ****************************<br>
+from sqlalchemy.orm import sessionmaker<br>
+Session = sessionmaker(bind=conn)<br>
+session = Session()<br><br>
+**** *coздаем объекты, передаем в сессию* *********<br>
+first = Zoo('first', 1)<br>
+second = Zoo('second', 2)<br>
+third = Zoo('third', 3)<br><br>
+
+session.add(first)<br>
+session.add_all(\[second, third])<br><br>
+**** *завершаем сессию. Результат - создан файл zoo.db* *********<br>
+session.commit()<br>
+
+<hr> 
+
+**** ***with***. *Usual case* *********<br>
+from sqlalchemy import create_engine<br>
+
+*--Create Engine object*<br>
+engine = create_engine("postgresql+psycopg2://user:password@localhost/dbname")<br>
+
+*--Working with db*<br>
+with engine.connect() as connection:<br>
+&emsp;    result = connection.execute("SELECT 1")<br>
+&emsp;    print(result.scalar())<br>
+
+*--Close pool connections*<br>
+engine.dispose()<br>
+
+
+
 

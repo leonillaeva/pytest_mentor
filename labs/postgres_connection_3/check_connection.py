@@ -2,8 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy import select
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import asc, desc
-# from db import session
-# import tables
+
 from labs.postgres_connection_3.tables.authentication_customuser import AuthCustomer
 
 if __name__ == "__main__":
