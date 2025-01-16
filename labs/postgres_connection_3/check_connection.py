@@ -1,23 +1,20 @@
 from sqlalchemy import create_engine
-
 from sqlalchemy import select
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.sql import exists
 from sqlalchemy import asc, desc
-# from db import session
-# import tables
+
 from labs.postgres_connection_3.tables.authentication_customuser import AuthCustomer
 
 if __name__ == "__main__":
     CONNECTION_ROW = "postgresql+psycopg2://postgres:postgres@localhost:5432/mentor_postgres_test"
     engine = create_engine(CONNECTION_ROW)
 
-    # try:
-    #     connection = engine.connect()
-    #     print("Connection successful")
-    #     connection.close()
-    # except Exception as e:
-    #     print("Error connection:", e)
+    try:
+        connection = engine.connect()
+        print("Connection successful")
+        connection.close()
+    except Exception as e:
+        print("Error connection:", e)
 
     Session = sessionmaker(
         bind=engine,
