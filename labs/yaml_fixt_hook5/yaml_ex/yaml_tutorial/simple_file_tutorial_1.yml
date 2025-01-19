@@ -126,4 +126,26 @@ strip_operator: |-
   spans more than
   one line
   see?
+
+# dates : {'birth': datetime.date(1828, 5, 25), 'death': datetime.date(1906, 3, 31)}
+dates:
+  birth: 1828-05-25
+  death: 1906-03-31
+
+# books : {'url': 'http://www.gutenberf.org/files/36068/36068-h/36068-h.htm'}
+books:
+  url: http://www.gutenberf.org/files/36068/36068-h/36068-h.htm
+
+# poems : [{'title': 'Motto', 'text': 'Politeness, perseverance and pluck,\nTo their possessor will bring good luck.\n'},
+  # {'title': 'Canadian Charms', 'text': 'Here industry is not in vain,\nFor
+poems:
+  - title: 'Motto'
+    text: |
+      Politeness, perseverance and pluck,
+      To their possessor will bring good luck.
+  - title: 'Canadian Charms'
+    text: |
+      Here industry is not in vain,
+      For we have bounteous crops of grain, 
+      And you behold on every on every field
  
