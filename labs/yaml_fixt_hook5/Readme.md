@@ -91,4 +91,5 @@ This function can then be called multiple times in the test
 15. Using fixtures from other projects
 
 ## hook
-[Расширяем тестовый фреймворк с помощью Pytest-плагинов.](https://habr.com/ru/companies/yadro/articles/789756/)
+1. [Расширяем тестовый фреймворк с помощью Pytest-плагинов.](https://habr.com/ru/companies/yadro/articles/789756/)
+2. [Understanding Hooks in Pytest](https://paragkamble.medium.com/understanding-hooks-in-pytest-892e91edbdb7)
