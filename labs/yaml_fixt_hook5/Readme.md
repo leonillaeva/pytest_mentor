@@ -89,3 +89,6 @@ This function can then be called multiple times in the test
     - Override a fixture with direct test parametrization
     - Override a parametrized fixture with non-parametrized one and vice versa
 15. Using fixtures from other projects
+
+## hook
+[Расширяем тестовый фреймворк с помощью Pytest-плагинов.](https://habr.com/ru/companies/yadro/articles/789756/)
