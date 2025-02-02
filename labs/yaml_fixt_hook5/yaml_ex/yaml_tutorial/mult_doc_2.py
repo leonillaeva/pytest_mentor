@@ -1,0 +1,19 @@
+import yaml
+
+try:
+    from yaml import CLoader as Loader
+except ImportError:
+    from yaml import Loader
+
+if __name__ == '__main__':
+    stream = open("multiple_documents_2.yaml", 'r')
+    dictionary = yaml.load_all(stream, Loader)
+
+    for doc in dictionary:
+        print("New document:")
+        for key, value in doc.items():
+            print(key + " : " + str(value))
+            if type(value) is list:
+                print(str(len(value)))
+
+    stream.close()

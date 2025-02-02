@@ -1,0 +1,151 @@
+---
+doe: "a deer, a female deer"
+ray: "a drop of golden sun"
+pi: 3.14159
+xmas: true
+french-hens: 3
+calling-birds: # calling-birds : ['huey', 'dewey', 'louie', 'fred']
+  - huey
+  - dewey
+  - louie
+  - fred
+xmas-fifth-day:
+  calling-birds: four
+  french-hens: 3
+  golden-rings: 5
+  partridges:
+    count: 1
+    location: "a pear tree"
+  turtle-doves: two
+
+# ------- Data types -------------------
+# An integer can be decimal, hexadecimal, or octal
+# -> numeric_types : {'foo': 12345, 'bar': 4820, 'plop': 9946}
+numeric_types:
+  foo: 12345
+  bar: 0x12d4
+  plop: 023332
+float:
+  foo: 1230.15
+  bar: 1230150.0
+
+# -> not-a-number_or_infinity : {'foo': inf, 'bar': -inf, 'plop': nan}
+not-a-number_or_infinity:
+  foo: .inf
+  bar: -.Inf
+  plop: .NAN
+
+# -> strings : {'foo': 'this is a normal string', 'foo_n': 'this is not a normal string\n', 'bar_n': 'this is not a normal string\\n'}
+strings:
+  foo: this is a normal string
+  foo_n: "this is not a normal string\n"
+  bar_n: this is not a normal string\n
+
+# -> single_quotes : {'bar': 'this is not a normal string it spans more than one line see?\n'}
+single_quotes:
+  bar: >
+    this is not a normal string it
+    spans more than
+    one line
+    see?
+  bar_without: this is not a normal string it spans more than one line see?
+
+# pipe_character : {'bar': 'this is not a normal string it\nspans more than\none line\nsee?\n'}
+pipe_character:
+  bar: |
+    this is not a normal string it
+    spans more than
+    one line
+    see?
+
+# nulls_tilda : {'foo': None, 'bar': None}
+nulls_tilda:
+  foo: ~
+  bar: null
+
+# ------ Arrays ------------
+# arrays : {'items': [1, 2, 3, 4, 5], 'names': ['one', 'two', 'three', 'four'],
+#           'items_mult_lines': [1, 2, 3, 4, 5], 'names_mult_lines': ['one', 'two', 'three', 'four']}
+arrays:
+  items: [ 1, 2, 3, 4, 5 ]
+  names: [ "one", "two", "three", "four" ]
+  items_mult_lines:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+  names_mult_lines:
+    - "one"
+    - "two"
+    - "three"
+    - "four"
+
+# complex_objects : [{'things': {'thing1': 'huey', 'things2': 'dewey', 'thing3': 'louie'}}, {'other things': {'key': 'value'}}]
+complex_objects:
+  - things:
+      thing1: huey
+      things2: dewey
+      thing3: louie
+  - other things:
+      key: value
+
+# ------- Dictionaries -------------
+# dict_inline : {'thing1': 'huey', 'thing2': 'louie', 'thing3': 'dewey'}
+dict_inline: { thing1: huey, thing2: louie, thing3: dewey }
+
+# span_lines : {'foo': 'bar', 'bar': 'foo'}
+span_lines:
+  foo: bar
+  bar: foo
+
+# nested : {'bar': ['bar', 'rab', 'plop']}
+nested:
+  bar:
+    - bar
+    - rab
+    - plop
+
+# ------------Advanced Options --------
+# --Chomp Modifiers--
+
+# strip_chomp : this is not a normal string it spans more than one line see?
+strip_chomp: >+
+  this is not a normal string it
+  spans more than
+  one line
+  see?
+
+# strip_operator : this is not a normal string it
+#spans more than
+#one line
+#see?
+#New line
+strip_operator: |-
+  this is not a normal string it
+  spans more than
+  one line
+  see?
+
+# dates : {'birth': datetime.date(1828, 5, 25), 'death': datetime.date(1906, 3, 31)}
+dates:
+  birth: 1828-05-25
+  death: 1906-03-31
+
+# books : {'url': 'http://www.gutenberf.org/files/36068/36068-h/36068-h.htm'}
+books:
+  url: http://www.gutenberf.org/files/36068/36068-h/36068-h.htm
+
+# poems : [{'title': 'Motto', 'text': 'Politeness, perseverance and pluck,\nTo their possessor will bring good luck.\n'},
+  # {'title': 'Canadian Charms', 'text': 'Here industry is not in vain,\nFor
+poems:
+  - title: 'Motto'
+    text: |
+      Politeness, perseverance and pluck,
+      To their possessor will bring good luck.
+  - title: 'Canadian Charms'
+    text: |
+      Here industry is not in vain,
+      For we have bounteous crops of grain, 
+      And you behold on every on every field
+ 
