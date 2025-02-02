@@ -1,0 +1,7 @@
+---
+bar: foo
+foo: bar
+...
+---
+one: two
+three: four
