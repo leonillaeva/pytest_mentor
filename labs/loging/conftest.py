@@ -1,26 +1,60 @@
+import os
+import pickle
+
 import pytest
 from selenium import webdriver
-from labs.loging.creds import USER_AGENT
+from labs.loging.creds import MAIN_URL, USER_AGENT
 
 
 # 1
 # # @pytest.fixture(scope="function")
-# @pytest.fixture(scope="class")
-# def driver(request):
-#     driver = webdriver.Chrome()
-#     request.cls.driver = driver
-#     yield driver
-#     driver.quit()
+@pytest.fixture(scope="class")
+def driver(request):
+    """Fixture for creating a driver without cookies"""
+    driver = webdriver.Chrome()
+    request.cls.driver = driver
+    yield driver
+    driver.quit()
+
+
+@pytest.fixture(scope="class")
+def load_cookies(driver):
+    """load cookies from a file and add them to the driver"""
+    # cookies_file_path = r'pages\cookies\cookies.pkl'
+    base_path = os.path.dirname(__file__)  # Берём путь к `conftest.py`
+    cookies_file_path = os.path.join(base_path, "pages", "cookies", "cookies.pkl")  # Автоматический путь
+
+    with open(cookies_file_path, "rb") as cookies_file:
+        cookies = pickle.load(cookies_file)
+
+    driver.get(MAIN_URL)
+
+    for cookie in cookies:
+        cookie['domain'] = '.zalando.de'
+        driver.add_cookie(cookie)
+
+    driver.refresh()
+
+
+@pytest.fixture(scope="class")
+def driver_cookies(request, load_cookies):
+    """Fixture for the driver with loaded cookies"""
+    driver = webdriver.Chrome()
+    request.cls.driver = driver
+
+    yield driver
+    driver.quit()
+
 
 # 2
 @pytest.fixture(scope="class")
-def driver(request):
+def driver_options(request):
+    # options = webdriver.ChromeOptions()
+    # # options.add_argument('dom.webdriver.enabled', False)
+    # options.add_argument(f"--user-agent={USER_AGENT}")
+    # driver = webdriver.Chrome(options=options)
 
-    options = webdriver.ChromeOptions()
-    # options.add_argument('dom.webdriver.enabled', False)
-    options.add_argument(f"--user-agent={USER_AGENT}")
-
-    driver = webdriver.Chrome(options=options)
+    driver = webdriver.Chrome()
     request.cls.driver = driver
     yield driver
     driver.quit()

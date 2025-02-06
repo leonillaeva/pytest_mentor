@@ -29,6 +29,10 @@ if __name__ == "__main__":
     h2_1_text = home_page.get_element_text(H2_1)
     print(h2_1_text)
 
-    home_page.find_click_on_account_button()
+    cookies = home_page.get_cookies_func()
+    print("Cookies:\n ", cookies)
+
+    save_cookies = home_page.save_cookies_pickle()
+    # home_page.find_click_on_account_button()
 
     driver.quit()

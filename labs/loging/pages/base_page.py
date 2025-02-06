@@ -1,3 +1,6 @@
+import pickle
+import os
+
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -60,6 +63,31 @@ class BasePage:
         user_agent = self.driver.execute_script("return navigator.userAgent")
         print("User agent:", user_agent)
 
+    def get_cookies_func(self):
+        return self.driver.get_cookies()
+
+    # def save_cookies_pickle(self):
+        # cookies = self.get_cookies_func()
+        # cookies_dir = os.path.join(os.getcwd(), "labs", "loging", "cookies")
+        # os.makedirs(cookies_dir, exist_ok=True)  # Create directory if it does not exist
+        # cookies_file_path = os.path.join(cookies_dir, "cookies.pkl")
+        # with open(cookies_file_path, "wb") as cookies_file:
+        #     pickle.dump(cookies, cookies_file)
+
+    def save_cookies_pickle(self):
+        cookies = self.get_cookies_func()
+        if cookies:
+            cookies_dir = os.path.join(os.getcwd(), "cookies")
+            os.makedirs(cookies_dir, exist_ok=True)  # Create directory if it does not exist
+            cookies_file_path = os.path.join(cookies_dir, "cookies.pkl")
+            try:
+                with open(cookies_file_path, "wb") as cookies_file:
+                    pickle.dump(cookies, cookies_file)
+                print("Cookies saved successfully.")
+            except Exception as e:
+                print(f"Error saving cookies: {e}")
+        else:
+            print("No cookies found to save.")
 
 # init driver
 # init common locators in header, footer
