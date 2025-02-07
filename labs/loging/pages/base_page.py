@@ -7,6 +7,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver import ActionChains
 from selenium import webdriver
+import time
+import random
 
 
 class BasePage:
@@ -34,7 +36,9 @@ class BasePage:
 
     def enter_text(self, element, text):
         element.clear()
-        element.send_keys(text)
+        for char in text:
+            element.send_keys(char)
+            time.sleep(random.uniform(0.2, 0.7))
 
     def find_click_on_account_button(self):
         """Find account button and click on it"""

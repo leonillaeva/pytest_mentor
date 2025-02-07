@@ -8,13 +8,13 @@ from labs.loging.creds import MAIN_URL, USER_AGENT
 
 # 1
 # # @pytest.fixture(scope="function")
-@pytest.fixture(scope="class")
-def driver(request):
-    """Fixture for creating a driver without cookies"""
-    driver = webdriver.Chrome()
-    request.cls.driver = driver
-    yield driver
-    driver.quit()
+# @pytest.fixture(scope="class")
+# def driver(request):
+#     """Fixture for creating a driver without cookies"""
+#     driver = webdriver.Chrome()
+#     request.cls.driver = driver
+#     yield driver
+#     driver.quit()
 
 
 @pytest.fixture(scope="class")
@@ -48,13 +48,33 @@ def driver_cookies(request, load_cookies):
 
 # 2
 @pytest.fixture(scope="class")
-def driver_options(request):
-    # options = webdriver.ChromeOptions()
-    # # options.add_argument('dom.webdriver.enabled', False)
-    # options.add_argument(f"--user-agent={USER_AGENT}")
-    # driver = webdriver.Chrome(options=options)
+def driver(request):
 
-    driver = webdriver.Chrome()
+    options = webdriver.ChromeOptions()
+    # options.add_argument('dom.webdriver.enabled', False)
+    options.add_argument(f"--user-agent={USER_AGENT}")
+    options.add_argument("--disable-blink-features=AutomationControlled")  # Remove Selenium detection
+    options.add_argument("--incognito")  # Use incognito mode
+    options.add_argument(
+        "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])  # Exclude automation switches
+    options.add_experimental_option("useAutomationExtension", False)
+
+    driver = webdriver.Chrome(options=options)
+    driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+        "source": """
+            Object.defineProperty(navigator, 'webdriver', {
+                get: () => undefined
+            });
+        """
+    })
+    driver.execute_cdp_cmd(
+        'Network.setExtraHTTPHeaders',
+        {"headers": {
+            "Accept-Language": "en-US,en;q=0.9",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36"
+        }}
+    )
     request.cls.driver = driver
     yield driver
     driver.quit()
