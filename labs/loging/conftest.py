@@ -17,42 +17,12 @@ from labs.loging.creds import MAIN_URL, USER_AGENT
 #     driver.quit()
 
 
-@pytest.fixture(scope="class")
-def load_cookies(driver):
-    """load cookies from a file and add them to the driver"""
-    # cookies_file_path = r'pages\cookies\cookies.pkl'
-    base_path = os.path.dirname(__file__)  # Берём путь к `conftest.py`
-    cookies_file_path = os.path.join(base_path, "pages", "cookies", "cookies.pkl")  # Автоматический путь
-
-    with open(cookies_file_path, "rb") as cookies_file:
-        cookies = pickle.load(cookies_file)
-
-    driver.get(MAIN_URL)
-
-    for cookie in cookies:
-        cookie['domain'] = '.zalando.de'
-        driver.add_cookie(cookie)
-
-    driver.refresh()
-
-
-@pytest.fixture(scope="class")
-def driver_cookies(request, load_cookies):
-    """Fixture for the driver with loaded cookies"""
-    driver = webdriver.Chrome()
-    request.cls.driver = driver
-
-    yield driver
-    driver.quit()
-
-
 # 2
 @pytest.fixture(scope="class")
 def driver(request):
-
     options = webdriver.ChromeOptions()
     # options.add_argument('dom.webdriver.enabled', False)
-    options.add_argument(f"--user-agent={USER_AGENT}")
+    # options.add_argument(f"--user-agent={USER_AGENT}")
     options.add_argument("--disable-blink-features=AutomationControlled")  # Remove Selenium detection
     options.add_argument("--incognito")  # Use incognito mode
     options.add_argument(
@@ -94,6 +64,35 @@ def driver_headless(request):
     driver = webdriver.Chrome(options=options)
     request.cls.driver = driver  # Set the driver as a class attribute
     yield
+    driver.quit()
+
+
+@pytest.fixture(scope="class")
+def load_cookies(driver):
+    """load cookies from a file and add them to the driver"""
+    # cookies_file_path = r'pages\cookies\cookies.pkl'
+    base_path = os.path.dirname(__file__)  # Берём путь к `conftest.py`
+    cookies_file_path = os.path.join(base_path, "pages", "cookies", "cookies.pkl")  # Автоматический путь
+
+    with open(cookies_file_path, "rb") as cookies_file:
+        cookies = pickle.load(cookies_file)
+
+    driver.get(MAIN_URL)
+
+    for cookie in cookies:
+        cookie['domain'] = '.zalando.de'
+        driver.add_cookie(cookie)
+
+    driver.refresh()
+
+
+@pytest.fixture(scope="class")
+def driver_cookies(request, load_cookies):
+    """Fixture for the driver with loaded cookies"""
+    driver = webdriver.Chrome()
+    request.cls.driver = driver
+
+    yield driver
     driver.quit()
 
 
