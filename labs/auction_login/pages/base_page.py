@@ -10,7 +10,7 @@ from selenium import webdriver
 
 
 class BasePage:
-    LOGIN_BUTTON = (By.XPATH, '//*[@id="welcome"]//a[@href="/components/login"]')
+    HOME_LOGIN_BUTTON = (By.XPATH, '//*[@id="welcome"]//a[@href="/components/login"]')
     TOP_ACCOUNT_BUTTON = (By.XPATH, "//*[@id='page_header']//div[@class='menu my_account']")
     TOP_MENU_ACCOUNT_ICON = (By.XPATH, '//*[@id="page_header"]//div[@class="menu my_account"]/a')
     LOGOUT_LINK = (By.XPATH, "//a[@href='/logout/']")
@@ -40,7 +40,7 @@ class BasePage:
 
     def find_click_on_signin_button(self):
         """Find Sign In button on the Home page and click on it"""
-        signin_button = self.search_element(self.LOGIN_BUTTON)
+        signin_button = self.wait_element(self.HOME_LOGIN_BUTTON)
         # print("Sign In button is found on the Home page")
         signin_button.click()
         # print("Sign In button is clicked on the Home page")
@@ -48,7 +48,7 @@ class BasePage:
     def find_click_top_menu_account_arrow(self):
         """Hover the cursor on an element and click on other element."""
         top_account_menu = self.search_element(self.TOP_ACCOUNT_BUTTON)
-        ActionChains(self.driver).move_to_element(top_account_button).perform()
+        ActionChains(self.driver).move_to_element(top_account_menu).perform()
         # self.click_element(click_locator)
 
     # def click_logout_link(self):

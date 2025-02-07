@@ -1,3 +1,5 @@
+import time
+
 import pytest
 
 from labs.auction_login.creds import BASE_URL, USERNAME_EMAIL, PASSWORD
@@ -30,6 +32,7 @@ class TestLoginPage:
         self.login_page.enter_text(psw_input, PASSWORD)
 
         signin_submit_button = self.login_page.search_element(SIGNIN_BUTTON)
+        print(SIGNIN_BUTTON)
         self.login_page.click_element(signin_submit_button)
 
         h2_content_text = self.login_page.wait_element(H2_CONTENT_TITLE).text.strip()
@@ -38,18 +41,22 @@ class TestLoginPage:
     def test_login_find_account_menu_icon(self):
         self.login_page.open_page(BASE_URL)
         self.login_page.maximize_window_position()
-        self.login_page.find_click_on_signin_button()
+        time.sleep(3)
+        home_login_button = self.login_page.wait_element(self.login_page.HOME_LOGIN_BUTTON)
+        self.login_page.click_element(home_login_button)
 
+        # self.login_page.find_click_on_signin_button()
+        # self.login_page.maximize_window_position()
         email_input = self.login_page.search_element(EMAIL_FIELD)
         self.login_page.enter_text(email_input, USERNAME_EMAIL)
 
         psw_input = self.login_page.search_element(PASSWORD_FIELD)
         self.login_page.enter_text(psw_input, PASSWORD)
 
-        signin_submit_button = self.login_page.wait_element(SIGNIN_BUTTON)
+        signin_submit_button = self.login_page.search_element(SIGNIN_BUTTON)
         self.login_page.click_element(signin_submit_button)
 
-        top_account_menu_icon = self.login_page.search_element(self.login_page.TOP_MENU_ACCOUNT_ICON)
+        top_account_menu_icon = self.login_page.wait_element(self.login_page.TOP_MENU_ACCOUNT_ICON)
         assert top_account_menu_icon.is_enabled(), "ERROR! Account Menu Icon is not enabled"
 
 
