@@ -22,6 +22,7 @@ SIGNIN_BUTTON_TEXT = "Sign in"
 
 
 @pytest.mark.usefixtures("driver")
+# @pytest.mark.usefixtures("driver_cookies")
 class TestLoginPageForm:
     def setup_method(self):
         self.login_page = LoginPage(self.driver)
@@ -38,7 +39,7 @@ class TestLoginPageForm:
         continue_button_text = self.login_page.search_element(CONTINUE_BUTTON_SPAN).text
 
         # print user agent
-        #self.login_page.get_user_agent()
+        # self.login_page.get_user_agent()
 
         assert continue_button_text == CONTINUE_BUTTON_TEXT
 
@@ -76,7 +77,7 @@ class TestLoginPageForm:
         # )
 
         # Explicit waits
-        wait_psw = WebDriverWait(self.driver, 10)
+        wait_psw = WebDriverWait(self.driver, 5)
         wait_psw.until(EC.visibility_of_element_located(PASSWORD_FIELD))
 
         # Re-find the password field before entering text (in headless mode, elements can change)

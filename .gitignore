@@ -170,9 +170,11 @@ cython_debug/
 # PyPI configuration file
 .pypirc
 
-labs/auction_login/creds.py
+
 labs/loging/creds.py
 draft.py
 creds.py
+
+labs/auction_login/creds.py
 
 
