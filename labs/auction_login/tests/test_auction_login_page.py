@@ -42,11 +42,12 @@ class TestLoginPage:
         self.login_page.open_page(BASE_URL)
         self.login_page.maximize_window_position()
         time.sleep(3)
-        home_login_button = self.login_page.wait_element(self.login_page.HOME_LOGIN_BUTTON)
-        self.login_page.click_element(home_login_button)
+        self.login_page.find_click_on_signin_button()
+        # home_login_button = self.login_page.wait_element(self.login_page.HOME_LOGIN_BUTTON)
+        # self.login_page.click_element(home_login_button)
 
         # self.login_page.find_click_on_signin_button()
-        # self.login_page.maximize_window_position()
+
         email_input = self.login_page.search_element(EMAIL_FIELD)
         self.login_page.enter_text(email_input, USERNAME_EMAIL)
 
