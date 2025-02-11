@@ -12,6 +12,11 @@ from labs.auction_login.pages.login_page import (LoginPage,
 @pytest.mark.usefixtures("driver")
 class TestLoginPage:
 
+    @pytest.fixture(scope='function', autouse=True)
+    def cleaning_driver_cache(self):
+        yield
+        self.login_page.delete_all_cookies()
+
     def setup_method(self):
         self.login_page = LoginPage(self.driver)
 

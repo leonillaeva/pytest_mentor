@@ -101,6 +101,9 @@ class BasePage:
     def maximize_window_position(self):
         self.driver.maximize_window()
 
+    def delete_all_cookies(self):
+        self.driver.delete_all_cookies()
+
 # init driver
 # init common locators in header, footer
 # common methods: open page, logout, click logo, transition on links
