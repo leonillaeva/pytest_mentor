@@ -1,5 +1,5 @@
 import os
-from auction_project.locators import HOME_SIGNIN_BUTTON
+from auction_project.locators import LocatorHomePage
 
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -37,6 +37,9 @@ class BasePage:
 
     def click_element(self, element):
         """Click on an element"""
+        # Find usual modal window with overlap
+        # find close button on window with overlap
+        # close modal overlap
         element.click()
 
     def enter_text(self, element, text):
@@ -46,7 +49,7 @@ class BasePage:
 
     def find_click_on_home_signin_button(self):
         """Find Sign In button on the Home page and click on it"""
-        signin_button = self.wait_element(HOME_SIGNIN_BUTTON)
+        signin_button = self.wait_element(LocatorHomePage.HOME_SIGNIN_BUTTON)
         # print("Sign In button is found on the Home page")
         signin_button.click()
         # print("Sign In button is clicked on the Home page")
