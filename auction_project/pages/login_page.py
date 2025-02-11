@@ -1,4 +1,4 @@
-from labs.auction_login.pages.base_page import BasePage
+from auction_project.pages.base_page import BasePage
 
 
 class LoginPage(BasePage):

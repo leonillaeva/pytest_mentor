@@ -16,7 +16,12 @@ class BasePage:
         """Open a page"""
         self.driver.get(url_page)
 
+    def get_page_containing_current_url(self, url, timeout=2):
+        """An expectation for checking that the current url contains a case- sensitive substring"""
+        return WebDriverWait(self.driver, timeout).until(EC.url_to_be(url))
+
     def get_current_url(self):
+        """Read the current URL from the browser’s address bar"""
         return self.driver.current_url
 
     def maximize_window_position(self):
@@ -45,3 +50,15 @@ class BasePage:
         # print("Sign In button is found on the Home page")
         signin_button.click()
         # print("Sign In button is clicked on the Home page")
+
+    def get_property_value_execute_script(self, element, pseudo_element, property_name):
+        """The getComputedStyle() method gets the computed CSS properties and values of an HTML element.
+            The getComputedStyle() method returns a CSSStyleDeclaration object.
+
+            lock_icon_content = driver.execute_script(
+                'return window.getComputedStyle(arguments[0], "::before").getPropertyValue("content");',
+                forgot_password_button)
+            """
+
+        script = f"return window.getComputedStyle(arguments[0], '{pseudo_element}').getPropertyValue('{property_name}');"
+        return self.driver.execute_script(script, element)
