@@ -17,7 +17,7 @@ class BasePage:
         self.driver.get(url_page)
 
     def get_page_containing_current_url(self, url, timeout=2):
-        """An expectation for checking that the current url contains a case- sensitive substring"""
+        """An expectation for checking that the current url contains a case-sensitive substring"""
         return WebDriverWait(self.driver, timeout).until(EC.url_to_be(url))
 
     def get_current_url(self):
@@ -30,6 +30,18 @@ class BasePage:
     def wait_element(self, locator, timeout=3):
         """Wait for element appearance on a page"""
         return WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located(locator))
+
+    def wait_element_to_be_clickable(self, locator, timeout=8):
+        """Used to find the element.
+        :return: WebElement : The WebElement once it is located and clickable."""
+        return WebDriverWait(self.driver, timeout).until(EC.element_to_be_clickable(locator))
+
+    def wait_text_to_be_present_value(self, locator, expected_text, timeout=3):
+        """Used to find the element.
+        The text to be present in the element’s value.
+        :return: boolean : True when the text is present, False otherwise."""
+        WebDriverWait(self.driver, timeout).until(
+            EC.text_to_be_present_in_element_value(locator, expected_text))
 
     def search_element(self, locator):
         """Find an element on a page"""
@@ -63,5 +75,33 @@ class BasePage:
                 forgot_password_button)
             """
 
-        script = f"return window.getComputedStyle(arguments[0], '{pseudo_element}').getPropertyValue('{property_name}');"
+        script = (f"return window.getComputedStyle(arguments[0], '{pseudo_element}'"
+                  f").getPropertyValue('{property_name}');")
         return self.driver.execute_script(script, element)
+
+    def normalize_text(self, text):
+        """Delete whitespaces before lines"""
+        return "\n".join(line.strip() for line in text.splitlines()).strip()
+
+    def delete_all_cookies(self):
+        self.driver.delete_all_cookies()
+
+    # def execute_js_script_click(self, argument, element):
+    #     """Executes JavaScript code snippet in the current context.
+    #     The click() method simulates a mouse-click on an element.
+    #
+    #     signin_button = driver.find_element(By.CLASS_NAME, "sign_in")
+    #     driver.execute_script("arguments[0].click();", signin_button)
+    #
+    #     arguments[0] — a list of arguments,
+    #     arguments[0] → the first argument (signin_button), passed from Python to JS"""
+    #     script = f"{argument}.click();"
+    #     self.driver.execute_script(script, element)
+
+    # def execute_js_script_get_value(self, argument, element):
+    #     """Executing JavaScript to capture value of element.
+    #
+    #     Instantly get button text after click
+    #     button_text = driver.execute_script("return arguments[0].value;", signin_button)"""
+    #     script = f"return {argument}.value;"
+    #     return self.driver.execute_script(script, element)
