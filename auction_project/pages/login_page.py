@@ -1,7 +1,7 @@
 from auction_project.pages.base_page import BasePage
 from selenium import webdriver
 from auction_project.creds import BASE_URL
-from auction_project.locators import LocatorHomePage, LocatorLoginPage, LocatorAccountSettings
+from auction_project.locators.locators import LocatorHomePage, LocatorLoginPage, LocatorAccountSettings
 
 
 class LoginPage(BasePage):

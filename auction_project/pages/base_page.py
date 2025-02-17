@@ -1,5 +1,6 @@
 import os
-from auction_project.locators import LocatorHomePage
+from auction_project.locators.locators import LocatorHomePage, LocatorLoginPage, LocatorAccountSettings
+from auction_project.creds import USERNAME_EMAIL, PASSWORD
 
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -27,11 +28,11 @@ class BasePage:
     def maximize_window_position(self):
         self.driver.maximize_window()
 
-    def wait_element(self, locator, timeout=3):
+    def wait_element(self, locator, timeout=10):
         """Wait for element appearance on a page"""
         return WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located(locator))
 
-    def wait_element_to_be_clickable(self, locator, timeout=8):
+    def wait_element_to_be_clickable(self, locator, timeout=10):
         """Used to find the element.
         :return: WebElement : The WebElement once it is located and clickable."""
         return WebDriverWait(self.driver, timeout).until(EC.element_to_be_clickable(locator))
@@ -85,6 +86,35 @@ class BasePage:
 
     def delete_all_cookies(self):
         self.driver.delete_all_cookies()
+
+    def login_user(self, url_page):
+        self.driver.get(url_page)
+        self.driver.maximize_window()
+        home_login_button = WebDriverWait(self.driver, timeout=5).until(
+            EC.element_to_be_clickable(LocatorHomePage.HOME_SIGNIN_BUTTON))
+        home_login_button.click()
+
+        email_field = WebDriverWait(self.driver, timeout=5).until(
+            EC.presence_of_element_located(LocatorLoginPage.USERNAME_EMAIL_FIELD))
+        email_field.send_keys(USERNAME_EMAIL)
+
+        password_field = WebDriverWait(self.driver, timeout=5).until(
+            EC.presence_of_element_located(LocatorLoginPage.PASSWORD_FIELD))
+        password_field.send_keys(PASSWORD)
+
+        login_signin_button = WebDriverWait(self.driver, timeout=5).until(
+            EC.element_to_be_clickable(LocatorLoginPage.LOGIN_SIGNIN_BUTTON))
+        login_signin_button.click()
+
+        account_settings_page = WebDriverWait(self.driver, timeout=5).until(
+            EC.presence_of_element_located(LocatorAccountSettings.H2_CONTACT_PREFERENCES))
+        return account_settings_page
+
+    def get_shadow_root_value(self, locator, locator_shadow):
+        """Get shadow root of an element"""
+        element_with_shadow_root = self.wait_element(locator, timeout=15).shadow_root
+        element_shadow_value = element_with_shadow_root.find_element(*locator_shadow).text
+        return element_shadow_value
 
     # def execute_js_script_click(self, argument, element):
     #     """Executes JavaScript code snippet in the current context.
