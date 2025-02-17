@@ -41,3 +41,4 @@ class LocatorLoginPage:
 class LocatorAccountSettings:
     H2_CONTACT_PREFERENCES = (By.XPATH, "//h2[text()='Contact Preferences']")
     H2_CONTACT_PREFERENCES_TEXT = 'Contact Preferences'
+    CANCEL_BOTTOM_BUTTON = (By.LINK_TEXT, 'Cancel')
