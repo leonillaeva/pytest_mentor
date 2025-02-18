@@ -129,6 +129,8 @@ class TestLoginPage:
         # 5 Click on 'Sign In' button
         # 'Sign In' button is changed to 'Signing In…' button
         login_signin_button = self.login_page.search_element(LocatorLoginPage.LOGIN_SIGNIN_BUTTON)
+        # Automation cannot check changing Sign-in button value, but we can check "data-disable-with" attribute
+        assert login_signin_button.get_attribute("data-disable-with") == LocatorLoginPage.LG_SIGNIN_BUTTON_TEXT_AFTER_CLICK
         self.login_page.click_element(login_signin_button)
 # 1 ----------after click Signing In...-
         # self.login_page.wait_text_to_be_present_value(LocatorLoginPage.LOGIN_SIGNIN_BUTTON,
@@ -139,7 +141,7 @@ class TestLoginPage:
         # assert changed_text == LocatorLoginPage.LG_SIGNIN_BUTTON_TEXT_AFTER_CLICK
 
         # * User is redirected to Contact Preferences page
-        h2_contact_preferences = self.login_page.search_element(LocatorAccountSettings.H2_CONTACT_PREFERENCES).text
+        h2_contact_preferences = self.login_page.wait_element(LocatorAccountSettings.H2_CONTACT_PREFERENCES).text
         assert h2_contact_preferences == LocatorAccountSettings.H2_CONTACT_PREFERENCES_TEXT
 
     def test_0003_check_login_error(self):
@@ -205,10 +207,10 @@ class TestLoginPage:
         assert red_x_icon_color == 'rgb(229, 77, 66)', "Incorrect red color for 'X' icon!"
 
 # 2 -----------red x button img---------- assert 'none'--
-#         red_x_icon_img = self.login_page.get_property_value_execute_script(
-#             red_x_icon_block, "", "background-image")
-#         assert red_x_icon_img == 'https://www.edgepipeline.com/images/session_messenger/stop-red.png', \
-#             "Image is not found for red 'X' icon!"
+        red_x_icon_img = self.login_page.get_property_value_execute_script(
+            red_x_icon_block, "", "background-image")
+        assert red_x_icon_img == 'https://www.edgepipeline.com/images/session_messenger/stop-red.png', \
+            "Image is not found for red 'X' icon!"
 
         # 9 Check Error window has close ('x') button at top right corner
         close_button = self.login_page.search_element(LocatorLoginPage.CLOSE_BUTTON_MODAL_WINDOW)

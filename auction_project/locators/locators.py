@@ -15,7 +15,7 @@ class LocatorLoginPage:
     PASSWORD_FIELD = (By.ID, "password")
     PASSWORD_PLACEHOLDER = "Password"
 
-    LOGIN_SIGNIN_BUTTON = (By.XPATH, "//input[@value='Sign In']")
+    LOGIN_SIGNIN_BUTTON = (By.XPATH, "//div[@class='submit_buttons']/input")
     LOGIN_SIGNIN_BUTTON_TEXT = "Sign In"
     LG_SIGNIN_BUTTON_TEXT_AFTER_CLICK = "Signing In..."
 
