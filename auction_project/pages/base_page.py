@@ -32,6 +32,10 @@ class BasePage:
         """Wait for element appearance on a page"""
         return WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located(locator))
 
+    def wait_all_elements(self, locator, timeout=10):
+        """Wait for some elements appearance on a page"""
+        return WebDriverWait(self.driver, timeout).until(EC.presence_of_all_elements_located(locator))
+
     def wait_element_to_be_clickable(self, locator, timeout=10):
         """Used to find the element.
         :return: WebElement : The WebElement once it is located and clickable."""
@@ -47,6 +51,10 @@ class BasePage:
     def search_element(self, locator):
         """Find an element on a page"""
         return self.driver.find_element(*locator)
+
+    def search_elements(self, locator):
+        """Find elements on a page"""
+        return self.driver.find_elements()
 
     def click_element(self, element):
         """Click on an element"""
