@@ -15,7 +15,7 @@ class LocatorAuctionEventsPage:
     # AUCTION_DAY_H2 = (By.XPATH, "//ul[@class='days']//li[contains(@class, 'day')]//h2")
     AUCTION_DAY_H2 = (By.XPATH, ".//h2")
     # AUCTION_DAY_LI = (By.XPATH, "//ul[@class='days']//li[contains(@class, 'day')]//ul[@class='events']//li")
-    AUCTION_DAY_LI = (By.XPATH, ".//ul[@class='events']//li")
+    AUCTION_DAY_LI = (By.XPATH, ".//ul[@class='events']//li[@class='auction']")
     # AUCTION_NO_EVENTS = (By.XPATH, "//ul[@class='days']//li[contains(@class, 'day')]"
     #                                "//ul[@class='events']//li[@class='no_events']")
     # AUCTION_NUMBER = (By.XPATH, "//ul[@class='days']//li[contains(@class, 'day')]"
