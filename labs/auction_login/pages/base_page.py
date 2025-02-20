@@ -10,7 +10,11 @@ from selenium import webdriver
 
 
 class BasePage:
-    HOME_LOGIN_BUTTON = (By.XPATH, '//*[@id="welcome"]//a[@href="/components/login"]')
+    # HOME_LOGIN_BUTTON = (By.XPATH, '//*[@id="welcome"]//a[@href="/components/login"]')
+    # HOME_LOGIN_BUTTON = (By.XPATH, '//a[text()="Sign In"]')
+    # HOME_LOGIN_BUTTON = (By.XPATH, "//a[@class='button secondary frosted']")
+    HOME_LOGIN_BUTTON = (By.CSS_SELECTOR, 'div > a.button.secondary.frosted')
+
     TOP_ACCOUNT_BUTTON = (By.XPATH, "//*[@id='page_header']//div[@class='menu my_account']")
     TOP_MENU_ACCOUNT_ICON = (By.XPATH, '//*[@id="page_header"]//div[@class="menu my_account"]/a')
     LOGOUT_LINK = (By.XPATH, "//a[@href='/logout/']")
@@ -96,6 +100,9 @@ class BasePage:
 
     def maximize_window_position(self):
         self.driver.maximize_window()
+
+    def delete_all_cookies(self):
+        self.driver.delete_all_cookies()
 
 # init driver
 # init common locators in header, footer

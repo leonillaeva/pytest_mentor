@@ -12,6 +12,11 @@ from labs.auction_login.pages.login_page import (LoginPage,
 @pytest.mark.usefixtures("driver")
 class TestLoginPage:
 
+    @pytest.fixture(scope='function', autouse=True)
+    def cleaning_driver_cache(self):
+        yield
+        self.login_page.delete_all_cookies()
+
     def setup_method(self):
         self.login_page = LoginPage(self.driver)
 
@@ -42,9 +47,9 @@ class TestLoginPage:
         self.login_page.open_page(BASE_URL)
         self.login_page.maximize_window_position()
         time.sleep(3)
-        self.login_page.find_click_on_signin_button()
-        # home_login_button = self.login_page.wait_element(self.login_page.HOME_LOGIN_BUTTON)
-        # self.login_page.click_element(home_login_button)
+        # self.login_page.find_click_on_signin_button()
+        home_login_button = self.login_page.wait_element(self.login_page.HOME_LOGIN_BUTTON)
+        self.login_page.click_element(home_login_button)
 
         # self.login_page.find_click_on_signin_button()
 
