@@ -8,6 +8,8 @@ class LocatorAuctionEventsPage:
     CALENDAR_SHADOW_VALUE = (By.CSS_SELECTOR, "div")
     CALENDAR_DAYS = (By.XPATH, "//div[@class='v-btn__content']")
     CALENDAR_PICKER_HEADER = (By.XPATH, "//div[@class='accent--text']/button")
+    ACTIVE_DAY_PICKER = (By.XPATH, "//button[@class='v-btn v-date-picker-table__current "
+                                   "v-btn--active v-btn--text v-btn--rounded theme--light accent']/div")
 
     CHECKBOX_LIMIT_MY_AUCTIONS = (By.XPATH, "//div[@class='my-auctions-filter']//input")
     BLOCK_EVENTS = (By.XPATH, "//ul[@class='days']")
@@ -23,3 +25,4 @@ class LocatorAuctionEventsPage:
     AUCTION_NUMBER = (By.XPATH, ".//span[@class='hidden_count']")
     AUCTION_NO_EVENTS = (By.XPATH, "//ul[@class='events']//li[@class='no_events']")
     NO_EVENTS_TEXT = "No Events Today"
+
