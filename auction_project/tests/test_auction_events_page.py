@@ -71,25 +71,32 @@ class TestAuctionEventsPage:
         calendar_picker = self.auction_events.search_element(LocatorAuctionEventsPage.CALENDAR_PICKER)
         assert calendar_picker.is_displayed(), "Calendar picker is not displayed"
 
-        # 0.получить сегодняшний день
-        #         # - дату, месяц, год
+        # 3 Get current date: day, month, year
         today_date = Calendar().get_today_date_without_format()
 
-        # 4. Вычислить дату следующего дня
-        # 5. получить данные след дня
-        # - дату, месяц, год
-        tomorrow_date = Calendar().get_next_date(today_date)
-        tomorrow_day_number = Calendar().get_day_number(tomorrow_date)
-        tomorrow_month = Calendar().get_name_month(tomorrow_date)
-        tomorrow_year = Calendar().get_year(tomorrow_date)
-
-        # 6. Проверить месяц, год в пикере 'February 2025' - сложить как в пикере
-        header_picker_text = str(tomorrow_month) + ' ' + str(tomorrow_year)
-        print("+", header_picker_text)
+        # 4 Check text in the calendar picker header, current day
+        expected_header_picker_text = self.auction_events.get_expected_calendar_picker_header(today_date)
+        # print("expected_header", expected_header_picker_text)
         calendar_picker_header = self.auction_events.search_element(
             LocatorAuctionEventsPage.CALENDAR_PICKER_HEADER).text
-        print("in calendar", calendar_picker_header)
-        assert calendar_picker_header == header_picker_text
+        # print("in calendar", calendar_picker_header)
+        assert calendar_picker_header == expected_header_picker_text, "Calendar header is not as expected header"
+
+        # 5 Check active day
+        active_day_in_picker = self.auction_events.search_element(LocatorAuctionEventsPage.ACTIVE_DAY_PICKER)
+        assert active_day_in_picker.is_displayed(), "Active button of today`s day is not shown"
+
+        expected_today_day_number = Calendar().get_day_number(today_date)
+        active_today_day_number_in_picker = active_day_in_picker.text
+        assert active_today_day_number_in_picker == str(expected_today_day_number)
+
+        # 5. Calculate next date, select next date, check displaying next date in format in the calendar field
+        next_date_in_calendar = self.auction_events.select_target_day_number_in_calendar_picker(today_date, 1)
+        next_day_calc = Calendar().get_next_date(today_date, 1)
+        next_day_calc_in_format = Calendar().get_date_in_format(next_day_calc)
+        assert next_date_in_calendar == next_day_calc_in_format
+
+
 
 # -----------------след день 0006
 # 0.получить сегодняшний день
