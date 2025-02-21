@@ -59,6 +59,34 @@ class AuctionEventsPage(BasePage):
 
         return list_events_per_day
 
+    def get_expected_calendar_picker_header(self, date_without_format):
+        date_items_list = Calendar().get_date_items_list(date_without_format)
+        expected_header_text = date_items_list[1] + ' ' + str(date_items_list[2])
+        return expected_header_text
+
+    def select_target_day_number_in_calendar_picker(self, current_day_without_format, number):
+        current_day_items_list = Calendar().get_date_items_list(current_day_without_format)
+        current_month = current_day_items_list[1]
+        current_year = current_day_items_list[2]
+
+        target_day = Calendar().get_next_date(current_day_without_format, number)
+        target_day_items_list = Calendar().get_date_items_list(target_day)
+        target_day_number = target_day_items_list[0]
+        target_month = target_day_items_list[1]
+        target_year = target_day_items_list[2]
+        target_day_xpath = f"//div[@class='v-btn__content'][contains(text(), '{target_day_number}')]"
+        # print("Target day: ", target_day_number)
+
+        if current_month == target_month and current_year == target_year:
+            target_day_element = self.wait_element((By.XPATH, target_day_xpath))
+            target_day_element.click()
+
+        # calendar_field_value = self.wait_element(LocatorAuctionEventsPage.CALENDAR).text
+        calendar_value = self.get_shadow_root_value(
+            LocatorAuctionEventsPage.CALENDAR, LocatorAuctionEventsPage.CALENDAR_SHADOW_VALUE)
+
+        return calendar_value
+
 
 if __name__ == "__main__":
     driver = webdriver.Chrome()
@@ -75,9 +103,9 @@ if __name__ == "__main__":
     print(f"Title '{h1_auction_events}' is found")
 
     # --------- 0004
-    # calendar = auc_ev.wait_element(LocatorAuctionEventsPage.CALENDAR, timeout=15)
-    # if calendar:
-    #     print("Calendar is found")
+    calendar = auc_ev.wait_element(LocatorAuctionEventsPage.CALENDAR, timeout=15)
+    if calendar:
+        print("Calendar is found")
 
     # calendar_shadow_root = auc_ev.wait_element(LocatorAuctionEventsPage.CALENDAR, timeout=15).shadow_root
     # calendar_shadow_text = calendar_shadow_root.find_element(*LocatorAuctionEventsPage.CALENDAR_SHADOW_VALUE).text
@@ -120,16 +148,19 @@ if __name__ == "__main__":
     # 0.получить сегодняшний день
     #         # - дату, месяц, год
     today_date = Calendar().get_today_date_without_format()
+    exp_header = auc_ev.get_expected_calendar_picker_header(today_date)
+    # print(exp_header)
 
     # 4. Вычислить дату следующего дня
-    # 5. получить данные след дня
-    # - дату, месяц, год
-    tomorrow_date = Calendar().get_next_date(today_date)
-    tomorrow_day_number = Calendar().get_day_number(tomorrow_date)
-    tomorrow_month = Calendar().get_name_month(tomorrow_date)
-    tomorrow_year = Calendar().get_year(tomorrow_date)
-    # print(tomorrow_date, "\n", tomorrow_day_number, "\n", tomorrow_month, "\n", tomorrow_year)
-    header_picker_text = str(tomorrow_month) + ' ' + str(tomorrow_year)
-    print(header_picker_text)
-    # calendar_picker_header = auc_ev.search_element(LocatorAuctionEventsPage.CALENDAR_PICKER_HEADER).text
-    # print()
+    # tomorrow_date = Calendar().get_next_date(today_date, 1)
+    # print(tomorrow_date)  # 2025-02-21 16:25:54.856285
+    # exp_header_tomorrow = auc_ev.get_expected_calendar_picker_header(tomorrow_date)
+    # print("Exp tom header: ", exp_header_tomorrow)
+
+    calendar.click()
+    calendar_picker = auc_ev.search_element(LocatorAuctionEventsPage.CALENDAR_PICKER)
+    # if calendar_picker:
+    #     print("Picker found")
+
+    calendar_field_value_text = auc_ev.select_target_day_number_in_calendar_picker(today_date, 1)
+    print("calendar field value text", calendar_field_value_text)
