@@ -58,6 +58,8 @@ class Calendar:
         return date_without_format.strftime("%a")
 
     def get_short_weekday_date_in_events_block(self, date_without_format):
+        """Construct and get short weekday.
+        :return: string, 'Tue 2/25'"""
         weekday_short = self.get_weekday(date_without_format)
         month = date_without_format.month
         day = date_without_format.day
