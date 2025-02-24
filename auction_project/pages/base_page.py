@@ -124,22 +124,3 @@ class BasePage:
         element_shadow_value = element_with_shadow_root.find_element(*locator_shadow).text
         return element_shadow_value
 
-    # def execute_js_script_click(self, argument, element):
-    #     """Executes JavaScript code snippet in the current context.
-    #     The click() method simulates a mouse-click on an element.
-    #
-    #     signin_button = driver.find_element(By.CLASS_NAME, "sign_in")
-    #     driver.execute_script("arguments[0].click();", signin_button)
-    #
-    #     arguments[0] — a list of arguments,
-    #     arguments[0] → the first argument (signin_button), passed from Python to JS"""
-    #     script = f"{argument}.click();"
-    #     self.driver.execute_script(script, element)
-
-    # def execute_js_script_get_value(self, argument, element):
-    #     """Executing JavaScript to capture value of element.
-    #
-    #     Instantly get button text after click
-    #     button_text = driver.execute_script("return arguments[0].value;", signin_button)"""
-    #     script = f"return {argument}.value;"
-    #     return self.driver.execute_script(script, element)
