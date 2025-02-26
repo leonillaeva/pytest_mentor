@@ -89,8 +89,16 @@ class BasePage:
         return self.driver.execute_script(script, element)
 
     def normalize_text(self, text):
-        """Delete whitespaces before lines"""
+        """Delete whitespaces before lines.
+        "\n".join(...) concatenates string with \n.
+        :return: string with \n, 'No Events\nToday'"""
         return "\n".join(line.strip() for line in text.splitlines()).strip()
+
+    def normalize_text_without_n(self, text):
+        """Delete extra whitespaces and replace \n with a space.
+        :return: string, 'No Events Today';
+         '   No Events  \n Today   ' ->  'No Events Today' """
+        return " ".join(line.strip() for line in text.splitlines()).strip()
 
     def delete_all_cookies(self):
         self.driver.delete_all_cookies()
@@ -123,23 +131,3 @@ class BasePage:
         element_with_shadow_root = self.wait_element(locator, timeout=15).shadow_root
         element_shadow_value = element_with_shadow_root.find_element(*locator_shadow).text
         return element_shadow_value
-
-    # def execute_js_script_click(self, argument, element):
-    #     """Executes JavaScript code snippet in the current context.
-    #     The click() method simulates a mouse-click on an element.
-    #
-    #     signin_button = driver.find_element(By.CLASS_NAME, "sign_in")
-    #     driver.execute_script("arguments[0].click();", signin_button)
-    #
-    #     arguments[0] — a list of arguments,
-    #     arguments[0] → the first argument (signin_button), passed from Python to JS"""
-    #     script = f"{argument}.click();"
-    #     self.driver.execute_script(script, element)
-
-    # def execute_js_script_get_value(self, argument, element):
-    #     """Executing JavaScript to capture value of element.
-    #
-    #     Instantly get button text after click
-    #     button_text = driver.execute_script("return arguments[0].value;", signin_button)"""
-    #     script = f"return {argument}.value;"
-    #     return self.driver.execute_script(script, element)
