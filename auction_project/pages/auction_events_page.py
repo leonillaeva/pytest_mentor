@@ -1,5 +1,6 @@
 import time
 
+from selenium.common import TimeoutException, NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -21,12 +22,12 @@ class AuctionEventsPage(BasePage):
     def get_no_events_text(self, block):
         """Get day`s value in block events and normalize text.
         :return: string, 'No Events Today'"""
-        no_events_text = WebDriverWait(block, timeout=10).until(
-            EC.presence_of_element_located(LocatorAuctionEventsPage.AUCTION_NO_EVENTS)).text
-        normalized_text = self.normalize_text(no_events_text)
-        return normalized_text
+        no_events_block = WebDriverWait(block, timeout=10).until(
+            EC.presence_of_element_located(LocatorAuctionEventsPage.AUCTION_NO_EVENTS))
+        no_events_value = no_events_block.text
+        # normalized_text = self.normalize_text(no_events_text)
+        return no_events_value  # normalized_text
 
-    # 1
     def get_days_numbers_events(self):
         """Get days with numbers events in day in block events.
         Numbers of events are shown after clicking the checkbox "Limit to My Auctions".
@@ -35,18 +36,31 @@ class AuctionEventsPage(BasePage):
         {"Wed 3/5": 29}, {"Thu 3/6": 22}, {"Fri 3/7": 15}]"""
         list_events_per_day = []
         day_blocks = self.wait_all_elements(LocatorAuctionEventsPage.DAY_BLOCKS)
+        print(f"Найдено {len(day_blocks)} блоков дней")  # Проверим, что блоки найдены
 
         for day_block in day_blocks:
+            time.sleep(0.5)
             day_title = day_block.find_element(*LocatorAuctionEventsPage.AUCTION_DAY_H2).text.strip()
+            print(f"Обрабатываем день: {day_title}")  # Посмотрим заголовки дней
+
             try:
-                events_number = WebDriverWait(day_block, timeout=15).until(
-                    EC.presence_of_element_located(LocatorAuctionEventsPage.AUCTION_NUMBER)).text
-                count_events = {day_title: int(events_number)}
+                event_num_elem = day_block.find_element(*LocatorAuctionEventsPage.AUCTION_NUMBER).text.strip()
+                count_events = {day_title: int(event_num_elem)}
                 list_events_per_day.append(count_events)
-            except:
-                normalized_text = self.get_no_events_text(day_block)
-                count_events = {day_title: normalized_text}
-                list_events_per_day.append(count_events)
+            except NoSuchElementException:
+                no_events_block = day_block.find_element(*LocatorAuctionEventsPage.AUCTION_NO_EVENTS)
+                if no_events_block:
+                    print(f"Элемент {LocatorAuctionEventsPage.AUCTION_NO_EVENTS} найден для {day_title}")
+                    print(f"Элемент {LocatorAuctionEventsPage.AUCTION_NUMBER} не найден для {day_title}")
+
+                    no_events_text_value = no_events_block.text
+                    print(no_events_text_value)
+                    normalized_text = self.normalize_text(no_events_text_value)
+                    print(normalized_text)
+                    count_events = {day_title: normalized_text}
+                    list_events_per_day.append(count_events)
+
+            # list_events_per_day.append(count_events)
 
         return list_events_per_day
 
@@ -156,6 +170,34 @@ class AuctionEventsPage(BasePage):
         next_date_in_week_block = nx_dts[0]
         return next_date_in_week_block, exp_short_nx_date
 
+    def go_throw_events_lists_and_get_no_events_string(self):
+        """Get days events list in block. Check values.
+        If no str value, delete list, click the right button until the str value will be found.
+        :return: string, 'No Events Today'"""
+        count = 0
+        value = 1
+        checked_values = []
+        while isinstance(value, int):
+            time.sleep(2)
+            list_events = self.get_days_numbers_events()
+            time.sleep(1)
+
+            for day in list_events:
+                for value in day.values():
+                    if isinstance(value, str):
+
+                        no_events_normalized_value = self.normalize_text_without_n(value)
+
+                        return no_events_normalized_value
+                    else:
+                        checked_values.append(day)
+
+            del list_events
+            right_arrow = self.find_right_arrow()
+            right_arrow.click()
+            time.sleep(1)
+            count += 1
+
 
 if __name__ == "__main__":
     driver = webdriver.Chrome()
@@ -170,11 +212,11 @@ if __name__ == "__main__":
 
     h1_auction_events = auc_ev.wait_element(LocatorAuctionEventsPage.H1_AUCTION_EVENTS).text
     print(f"Title '{h1_auction_events}' is found")
-
-    # --------- 0004
-    calendar = auc_ev.wait_element(LocatorAuctionEventsPage.CALENDAR, timeout=15)
-    if calendar:
-        print("Calendar is found")
+    #
+    # # --------- 0004
+    # calendar = auc_ev.wait_element(LocatorAuctionEventsPage.CALENDAR, timeout=15)
+    # if calendar:
+    #     print("Calendar is found")
 
     # calendar_shadow_root = auc_ev.wait_element(LocatorAuctionEventsPage.CALENDAR, timeout=15).shadow_root
     # calendar_shadow_text = calendar_shadow_root.find_element(*LocatorAuctionEventsPage.CALENDAR_SHADOW_VALUE).text
@@ -216,8 +258,8 @@ if __name__ == "__main__":
 
     # 0.получить сегодняшний день
     #         # - дату, месяц, год
-    today_date = Calendar().get_today_date_without_format()
-    exp_header = auc_ev.get_expected_calendar_picker_header(today_date)
+    # today_date = Calendar().get_today_date_without_format()
+    # exp_header = auc_ev.get_expected_calendar_picker_header(today_date)
     # print(exp_header)
 
     # 4. Вычислить дату следующего дня
@@ -226,10 +268,46 @@ if __name__ == "__main__":
     # exp_header_tomorrow = auc_ev.get_expected_calendar_picker_header(tomorrow_date)
     # print("Exp tom header: ", exp_header_tomorrow)
 
-    calendar.click()
-    calendar_picker = auc_ev.search_element(LocatorAuctionEventsPage.CALENDAR_PICKER)
-    # if calendar_picker:
-    #     print("Picker found")
+    # calendar.click()
+    # calendar_picker = auc_ev.search_element(LocatorAuctionEventsPage.CALENDAR_PICKER)
+    # # if calendar_picker:
+    # #     print("Picker found")
+    #
+    # calendar_field_value_text = auc_ev.select_target_day_number_in_calendar_picker(today_date, 10)
+    # print("calendar field value text", calendar_field_value_text)
 
-    calendar_field_value_text = auc_ev.select_target_day_number_in_calendar_picker(today_date, 10)
-    print("calendar field value text", calendar_field_value_text)
+    # ---- 0009
+    # days_events_block = [{'Sun 2/23': 1}, {'TODAY': 10}, {'Tue 2/25': 37},
+    #                      {'Wed 2/26': 45}, {'Thu 2/27': 51}, {'Fri 2/28': 29}]
+
+    checkbox_limit_my_auctions = auc_ev.wait_element(
+        LocatorAuctionEventsPage.CHECKBOX_LIMIT_MY_AUCTIONS)
+    checkbox_limit_my_auctions.click()
+
+    # days_events_block = auc_ev.get_days_numbers_events()
+    # print(days_events_block)
+    no_events_text = LocatorAuctionEventsPage.NO_EVENTS_TEXT
+    print(no_events_text)
+
+    no_events_in_block = auc_ev.go_throw_events_lists_and_get_no_events_string()
+    print(no_events_in_block)
+
+    # count = 0
+    # value = 1
+    # checked_values = []
+    # while isinstance(value, int):
+    #     # days_events_block = auc_ev.get_days_numbers_events()
+    #
+    #     for day in days_events_block:
+    #         for value in day.values():
+    #             print(value)
+    #         if isinstance(value, str):
+    #             print(value)
+    #         else:
+    #             checked_values.append(day)
+    #
+    #     del days_events_block
+    #     right_arrow = auc_ev.find_right_arrow()
+    #     right_arrow.click()
+    #     time.sleep(2)
+    #     count += 1
