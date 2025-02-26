@@ -2,13 +2,12 @@ import time
 
 import pytest
 from datetime import date
-import datetime
 from selenium import webdriver
 
 from auction_project.utility.date_calendar import Calendar
-from auction_project.creds import ACCOUNT_SETTINGS_URL
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from auction_project.pages.auction_events_page import AuctionEventsPage
-from auction_project.locators.locators import LocatorAccountSettings
 from auction_project.locators.locators_auction_events import LocatorAuctionEventsPage
 
 
@@ -17,6 +16,8 @@ class TestAuctionEventsPage:
     def setup_method(self):
         self.auction_events = AuctionEventsPage(self.driver)
 
+    # def test_0004_check_today_date_selected_calendar(self, driver, login_user,
+    # wait_click_account_settings_cancel_button):
     def test_0004_check_today_date_selected_calendar(self):
         """Test to check if today's date is selected by default in the calendar."""
 
@@ -31,6 +32,7 @@ class TestAuctionEventsPage:
         today_date = date.today().strftime("%m/%d/%Y")
         assert calendar_value == today_date, f"Calendar value is not matched, today`s date {today_date}"
 
+    # def test_0005_check_events_shown_in_schedule(self, driver, login_user, wait_click_account_settings_cancel_button):
     def test_0005_check_events_shown_in_schedule(self):
         """Verify Schedule show events"""
         # 1 Open Auction Events page
@@ -49,6 +51,8 @@ class TestAuctionEventsPage:
             f"Mismatch between the list of events in the schedule and the number of events! "
         f"Expected: {len_events_in_days}, but got: {numbers_events}"
 
+    # def test_0006_check_today_elements_in_calendar_and_picker(self, driver, login_user,
+    # wait_click_account_settings_cancel_button):
     def test_0006_check_today_elements_in_calendar_and_picker(self):
         """ Verify that date selection in calendar works correctly.
         Verify that items of current date in calendar and picker work correctly."""
@@ -88,6 +92,7 @@ class TestAuctionEventsPage:
         next_day_calc_in_format = Calendar().get_date_in_format(next_day_calc)
         assert next_date_in_calendar == next_day_calc_in_format
 
+    # def test_0007_check_calendar_pagination(self, driver, login_user, wait_click_account_settings_cancel_button):
     def test_0007_check_calendar_pagination(self):
         """Check date is changed page by one week, when pressing on < or > button"""
 
@@ -141,6 +146,8 @@ class TestAuctionEventsPage:
     @pytest.mark.xfail(reason="assert not today_button.is_enabled(). AssertionError"
                               "The button is enabled and clickable after opening the page in Chrome."
                               "Working as designed")
+    # def test_0008_check_calendar_today_button_behavior(self, driver, login_user,
+    # wait_click_account_settings_cancel_button):
     def test_0008_check_calendar_today_button_behavior(self):
         """Check calendars 'Today' button behavior"""
         # 1	Open Auction Events page
@@ -187,7 +194,96 @@ class TestAuctionEventsPage:
         assert left_arrow.is_enabled(), "Left events block arrow is not enabled"
         left_arrow.click()
 
-    @pytest.mark.skip(reason="for, ElementNotInteractableException")
+    def test_0009_01_check_6_days_blocks_shown_with_no_events_day(self):
+        """Check that if no events scheduled, a text is shown.
+        ** Current behavior of Auction Events page, that only 6 days are shown by default
+    This test case should also predict case if not a single of 6 shown days has 'No Events Today' text"""
+        # 1	Open Auction Events page
+        h1_auction_events = self.auction_events.wait_element(LocatorAuctionEventsPage.H1_AUCTION_EVENTS)
+        assert h1_auction_events.is_displayed(), "'Auction Events' page is not opened. H1 is not found"
+
+        days_events_block = self.auction_events.wait_all_elements(LocatorAuctionEventsPage.DAY_BLOCKS)  # ERROR
+        time.sleep(3)
+        assert len(days_events_block) == 6, (f"Mismatch between the expected number of days. "
+                                             f"Expected 6. Got {len(days_events_block)} number")
+
+    @pytest.mark.xfail(reason='.NoSuchElementException: event_num_elem = day_block.find_element('
+                              '*LocatorAuctionEventsPage.AUCTION_NUMBER).text.strip()')
+    def test_0009_02_check_no_events_day(self):
+        """Check that if no events scheduled, a text is shown.
+                ** Current behavior of Auction Events page, that only 6 days are shown by default
+            This test case should also predict case if not a single of 6 shown days has 'No Events Today' text"""
+        # 1	Open Auction Events page
+        h1_auction_events = self.auction_events.wait_element(LocatorAuctionEventsPage.H1_AUCTION_EVENTS)
+        assert h1_auction_events.is_displayed(), "'Auction Events' page is not opened. H1 is not found"
+
+        checkbox_limit_my_auctions = self.auction_events.wait_element(
+            LocatorAuctionEventsPage.CHECKBOX_LIMIT_MY_AUCTIONS)
+        assert checkbox_limit_my_auctions.is_displayed(), "The checkbox 'Limit to My Auctions' is not dispalyed"
+        checkbox_limit_my_auctions.click()
+
+        # days_events_block = self.auction_events.wait_all_elements(LocatorAuctionEventsPage.DAY_BLOCKS)  # ERROR
+        # time.sleep(3)
+        # assert len(days_events_block) == 6, (f"Mismatch between the expected number of days. "
+        #                                      f"Expected 6. Got {len(days_events_block)} number")
+
+        # 2 Check that if no events appears in specific day in scheduler, 'No Events Today' text is shown
+        no_events_text = LocatorAuctionEventsPage.NO_EVENTS_TEXT
+        no_events_in_block = self.auction_events.go_throw_events_lists_and_get_no_events_string()
+        # print(f"In block: {no_events_in_block}, Text: {no_events_text}")
+        assert no_events_in_block == no_events_text
+
+    # @pytest.mark.skip(reason="In work")
+    def test_0009_03_check_no_events_day(self):
+        """Check that if no events scheduled, a text is shown.
+                ** Current behavior of Auction Events page, that only 6 days are shown by default
+            This test case should also predict case if not a single of 6 shown days has 'No Events Today' text"""
+        h1_auction_events = self.auction_events.wait_element(LocatorAuctionEventsPage.H1_AUCTION_EVENTS)
+        assert h1_auction_events.is_displayed(), "'Auction Events' page is not opened. H1 is not found"
+
+        checkbox_limit_my_auctions = self.auction_events.wait_element(
+            LocatorAuctionEventsPage.CHECKBOX_LIMIT_MY_AUCTIONS)
+        assert checkbox_limit_my_auctions.is_displayed(), "The checkbox 'Limit to My Auctions' is not dispalyed"
+        checkbox_limit_my_auctions.click()
+
+        no_events_text = "No Events Today"
+        no_events = False
+        while not no_events:
+            days_events_list = []
+            days_blocks = self.auction_events.wait_all_elements(LocatorAuctionEventsPage.DAY_BLOCKS)
+            for block in days_blocks:
+                assert block.is_displayed(), f"BLock {block} is not displayed"
+
+                title_elem = WebDriverWait(block, 10).until(
+                    EC.presence_of_element_located(LocatorAuctionEventsPage.AUCTION_DAY_H2)
+                )
+                assert title_elem.is_displayed(), f"Title element is not found for  {block}"
+                title = title_elem.text.strip()
+
+                events_elem = WebDriverWait(block, 10).until(
+                    EC.presence_of_element_located(LocatorAuctionEventsPage.CONTENT_EVENTS_WITH_CHECKBOX)
+                )
+                assert events_elem.is_displayed(), f"No events found for {block}"
+                events_value = events_elem.text.strip()
+                norm_events_value = self.auction_events.normalize_text_without_n(events_value)
+
+                day_dict = {title: norm_events_value}
+                days_events_list.append(day_dict)
+
+            print(days_events_list)
+
+            for day in days_events_list:
+                for event in day.values():
+                    if event == no_events_text:
+                        no_events = True
+                        assert event == "No Events Today"
+                        break
+                    else:
+                        # del days_events_list
+                        right_arrow = self.auction_events.find_right_arrow()
+                        right_arrow.click()
+
+    @pytest.mark.skip(reason="In work. ElementNotInteractableException")
     def test_0006_02_check_user_can_select_date_in_calendar(self):
         """Check schedule is changed when calendar date is chosen.
         Verify that date selection in calendar works correctly."""
@@ -196,17 +292,18 @@ class TestAuctionEventsPage:
         h1_auction_events = self.auction_events.wait_element(LocatorAuctionEventsPage.H1_AUCTION_EVENTS)
         assert h1_auction_events.is_displayed(), "'Auction Events' page is not opened. H1 is not found"
 
-        # 2 Click on date. Calendar popup opened
-        calendar_element = self.auction_events.wait_element(LocatorAuctionEventsPage.CALENDAR)
-        calendar_element.click()
-
-        calendar_picker = self.auction_events.search_element(LocatorAuctionEventsPage.CALENDAR_PICKER)
-        assert calendar_picker.is_displayed(), "Calendar picker is not displayed"
+        # # 2 Click on date. Calendar popup opened
+        # calendar_element = self.auction_events.wait_element(LocatorAuctionEventsPage.CALENDAR)
+        # calendar_element.click()
+        #
+        # calendar_picker = self.auction_events.search_element(LocatorAuctionEventsPage.CALENDAR_PICKER)
+        # assert calendar_picker.is_displayed(), "Calendar picker is not displayed"
 
         # 3 Get current date
         today_date = Calendar().get_today_date_without_format()
-
+        today_button = self.auction_events.wait_element(LocatorAuctionEventsPage.TODAY_BUTTON)
         days_numbers = [1, -1, 10, -10, 30, -30, 365, -365]
+
         for number in days_numbers:
             next_date_in_calendar = self.auction_events.select_target_day_number_in_calendar_picker(today_date, number)
             next_day_calc = Calendar().get_next_date(today_date, number)
@@ -214,6 +311,9 @@ class TestAuctionEventsPage:
 
             assert next_date_in_calendar == next_day_calc_in_format, \
                 f"Expected: {next_day_calc_in_format}, Got: {next_date_in_calendar}"
+
+            today_button.click()
+            time.sleep(1)
 
         # # Возвращаемся к сегодняшней дате и проверяем
         # today_date_in_calendar = self.auction_events.select_target_day_number_in_calendar_picker(today_date, 0)

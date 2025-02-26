@@ -89,8 +89,16 @@ class BasePage:
         return self.driver.execute_script(script, element)
 
     def normalize_text(self, text):
-        """Delete whitespaces before lines"""
+        """Delete whitespaces before lines.
+        "\n".join(...) concatenates string with \n.
+        :return: string with \n, 'No Events\nToday'"""
         return "\n".join(line.strip() for line in text.splitlines()).strip()
+
+    def normalize_text_without_n(self, text):
+        """Delete extra whitespaces and replace \n with a space.
+        :return: string, 'No Events Today';
+         '   No Events  \n Today   ' ->  'No Events Today' """
+        return " ".join(line.strip() for line in text.splitlines()).strip()
 
     def delete_all_cookies(self):
         self.driver.delete_all_cookies()
@@ -123,4 +131,3 @@ class BasePage:
         element_with_shadow_root = self.wait_element(locator, timeout=15).shadow_root
         element_shadow_value = element_with_shadow_root.find_element(*locator_shadow).text
         return element_shadow_value
-
