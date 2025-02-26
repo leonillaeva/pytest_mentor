@@ -88,6 +88,23 @@ class TestAuctionEventsPage:
         # 5. Calculate next date, select next date, check displaying next date in format in the calendar field
         number = 60
         next_date_in_calendar = self.auction_events.select_target_day_number_in_calendar_picker(today_date, number)
+        # 3 different approaches to use utility functions:
+        # 1. Initialise class as separate variable:
+        #   calendar = Calendar()
+        #   calendar.get_date_in_format(next_day_calc)
+        # 2. Use @staticmentod in Class mentrods:
+        # Example:
+        # class Calendar:
+        #    @staticmethod
+        #    def get_date_in_format(self, date):
+        #        # implementation of fuctions
+        # example of usage:
+        # Calendar.get_date_in_format(next_day_calc) #Calendar with no brackets "()"
+        # 3. No class Calendar
+        # Create functions like get_next_date without class in file date_calendar.py
+        # Usage:
+        # from ..date_calendar.py import get_next_date
+        # get_next_date(today_date, number)
         next_day_calc = Calendar().get_next_date(today_date, number)
         next_day_calc_in_format = Calendar().get_date_in_format(next_day_calc)
         assert next_date_in_calendar == next_day_calc_in_format
@@ -126,6 +143,9 @@ class TestAuctionEventsPage:
         previous_date_in_week, exp_short_prev_date = self.auction_events.get_next_date_and_calculate_expected_date(
             yesterday_date, -6)
         assert previous_date_in_week == exp_short_prev_date, "Mismatch between previous dates"
+        # alternative approach:
+        assert self.auction_events.is_expected_date_as_short_weekday_date_in_events_block(
+            yesterday_date, -6), "Mismatch between previous dates"
 
         # 4 Click on > button, Scheduler changed exact one week forward current week
         # -- return to the current week
@@ -143,9 +163,9 @@ class TestAuctionEventsPage:
             yesterday_date, 6)
         assert future_date_in_week == exp_short_future_date, "Mismatch between future dates"
 
-    @pytest.mark.xfail(reason="assert not today_button.is_enabled(). AssertionError"
-                              "The button is enabled and clickable after opening the page in Chrome."
-                              "Working as designed")
+    # @pytest.mark.xfail(reason="assert not today_button.is_enabled(). AssertionError"
+    #                           "The button is enabled and clickable after opening the page in Chrome."
+    #                           "Working as designed")
     # def test_0008_check_calendar_today_button_behavior(self, driver, login_user,
     # wait_click_account_settings_cancel_button):
     def test_0008_check_calendar_today_button_behavior(self):

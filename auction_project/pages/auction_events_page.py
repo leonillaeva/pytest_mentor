@@ -170,6 +170,20 @@ class AuctionEventsPage(BasePage):
         next_date_in_week_block = nx_dts[0]
         return next_date_in_week_block, exp_short_nx_date
 
+    def is_expected_date_as_short_weekday_date_in_events_block(self, yesterday_date, number):
+        """Get list dates of events block.
+        Calculate next expected date. Modify the date view as short.
+        :return: True/False."""
+        next_dates = self.wait_all_elements(LocatorAuctionEventsPage.LIST_BLOCK_DATES)
+        nx_dts = []
+        for dt in next_dates:
+            nx_dts.append(dt.text)
+
+        expected_next_date = Calendar().get_next_date(yesterday_date, number)
+        exp_short_nx_date = Calendar().get_short_weekday_date_in_events_block(expected_next_date)
+        next_date_in_week_block = nx_dts[0]
+        return next_date_in_week_block == exp_short_nx_date
+
     def go_throw_events_lists_and_get_no_events_string(self):
         """Get days events list in block. Check values.
         If no str value, delete list, click the right button until the str value will be found.
