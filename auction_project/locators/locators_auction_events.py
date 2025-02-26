@@ -22,7 +22,7 @@ class LocatorAuctionEventsPage:
     # EVENTS BLOCK
     BLOCK_EVENTS = (By.XPATH, "//ul[@class='days']")
     DAY_BLOCKS = (By.XPATH, "//ul[@class='days']//li[contains(@class, 'day')]")
-    # AUCTION_DAY_H2 = (By.XPATH, "//ul[@class='days']//li[contains(@class, 'day')]//h2")
+    AUCTION_DAY_H2_FULL_PATH = (By.XPATH, "//ul[@class='days']//li[contains(@class, 'day')]//h2")
     AUCTION_DAY_H2 = (By.XPATH, ".//h2")
     # AUCTION_DAY_LI = (By.XPATH, "//ul[@class='days']//li[contains(@class, 'day')]//ul[@class='events']//li")
     AUCTION_DAY_LI = (By.XPATH, ".//ul[@class='events']//li[@class='auction']")
@@ -31,8 +31,12 @@ class LocatorAuctionEventsPage:
     # AUCTION_NUMBER = (By.XPATH, "//ul[@class='days']//li[contains(@class, 'day')]"
     #                            "//ul[@class='events']//li//span[@class='hidden_count']")
     AUCTION_NUMBER = (By.XPATH, ".//span[@class='hidden_count']")
-    AUCTION_NO_EVENTS = (By.XPATH, "//ul[@class='events']//li[@class='no_events']")
+    AUCTION_NO_EVENTS = (By.XPATH, ".//li[@class='no_events']")
     NO_EVENTS_TEXT = "No Events Today"
+
+    # ------0009
+    CONTENT_EVENTS_WITH_CHECKBOX = (By.XPATH, ".//li[contains(@class, 'no_events')]")
+    # AUCTION_ALL_EVENTS_WITH_CHECKBOX = (By.XPATH, "//ul[@class='events']/li")
 
     RIGHT_EVENTS_BLOCK_ARROWS = (By.XPATH, "//a[@class='next']/i")
     LEFT_EVENTS_BLOCK_ARROWS = (By.XPATH, "//a[@class='back']/i")
