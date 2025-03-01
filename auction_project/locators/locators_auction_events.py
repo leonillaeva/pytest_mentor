@@ -43,5 +43,6 @@ class LocatorAuctionEventsPage:
     LIST_BLOCK_DATES = (By.XPATH, "//ul/li/h2")
 
     # TODAY BUTTON
-    TODAY_BUTTON = (By.XPATH, "//a[contains(@class, 'button secondary')]")
+    TODAY_BUTTON_ENABLED = (By.XPATH, "//a[@class = 'button secondary']")
+    TODAY_BUTTON_DISABLED = (By.XPATH, "//a[@class ='button secondary disabled']")
 
