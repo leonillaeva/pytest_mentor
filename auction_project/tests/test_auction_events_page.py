@@ -2,7 +2,6 @@ import time
 
 import pytest
 from datetime import date
-from selenium import webdriver
 
 from auction_project.utility.date_calendar import Calendar
 from selenium.webdriver.support.ui import WebDriverWait
@@ -16,8 +15,6 @@ class TestAuctionEventsPage:
     def setup_method(self):
         self.auction_events = AuctionEventsPage(self.driver)
 
-    # def test_0004_check_today_date_selected_calendar(self, driver, login_user,
-    # wait_click_account_settings_cancel_button):
     def test_0004_check_today_date_selected_calendar(self):
         """Test to check if today's date is selected by default in the calendar."""
 
@@ -28,11 +25,9 @@ class TestAuctionEventsPage:
         # 2 Check that Date in calendar is set to today`s date
         calendar_value = self.auction_events.get_shadow_root_value(
             LocatorAuctionEventsPage.CALENDAR, LocatorAuctionEventsPage.CALENDAR_SHADOW_VALUE)
-        # print(calendar_value)
         today_date = date.today().strftime("%m/%d/%Y")
         assert calendar_value == today_date, f"Calendar value is not matched, today`s date {today_date}"
 
-    # def test_0005_check_events_shown_in_schedule(self, driver, login_user, wait_click_account_settings_cancel_button):
     def test_0005_check_events_shown_in_schedule(self):
         """Verify Schedule show events"""
         # 1 Open Auction Events page
@@ -51,8 +46,6 @@ class TestAuctionEventsPage:
             f"Mismatch between the list of events in the schedule and the number of events! "
         f"Expected: {len_events_in_days}, but got: {numbers_events}"
 
-    # def test_0006_check_today_elements_in_calendar_and_picker(self, driver, login_user,
-    # wait_click_account_settings_cancel_button):
     def test_0006_check_today_elements_in_calendar_and_picker(self):
         """ Verify that date selection in calendar works correctly.
         Verify that items of current date in calendar and picker work correctly."""
@@ -109,7 +102,6 @@ class TestAuctionEventsPage:
         next_day_calc_in_format = Calendar().get_date_in_format(next_day_calc)
         assert next_date_in_calendar == next_day_calc_in_format
 
-    # def test_0007_check_calendar_pagination(self, driver, login_user, wait_click_account_settings_cancel_button):
     def test_0007_check_calendar_pagination(self):
         """Check date is changed page by one week, when pressing on < or > button"""
 
@@ -166,8 +158,6 @@ class TestAuctionEventsPage:
     @pytest.mark.xfail(reason="assert not today_button.is_enabled(). AssertionError"
                               "The button is enabled and clickable after opening the page in Chrome."
                               "Working as designed")
-    # def test_0008_check_calendar_today_button_behavior(self, driver, login_user,
-    # wait_click_account_settings_cancel_button):
     def test_0008_check_calendar_today_button_behavior(self):
         """Check calendars 'Today' button behavior"""
         # 1	Open Auction Events page
