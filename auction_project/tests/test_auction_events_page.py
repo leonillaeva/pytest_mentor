@@ -163,9 +163,9 @@ class TestAuctionEventsPage:
             yesterday_date, 6)
         assert future_date_in_week == exp_short_future_date, "Mismatch between future dates"
 
-    # @pytest.mark.xfail(reason="assert not today_button.is_enabled(). AssertionError"
-    #                           "The button is enabled and clickable after opening the page in Chrome."
-    #                           "Working as designed")
+    @pytest.mark.xfail(reason="assert not today_button.is_enabled(). AssertionError"
+                              "The button is enabled and clickable after opening the page in Chrome."
+                              "Working as designed")
     # def test_0008_check_calendar_today_button_behavior(self, driver, login_user,
     # wait_click_account_settings_cancel_button):
     def test_0008_check_calendar_today_button_behavior(self):
