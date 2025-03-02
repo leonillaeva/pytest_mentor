@@ -177,9 +177,9 @@ class TestAuctionEventsPage:
         # 2 Check 'Today' button
         # 'Today' button is present
         # 'Today' button is not enabled
-        today_button = self.auction_events.wait_element(LocatorAuctionEventsPage.TODAY_BUTTON)
-        # assert today_button.is_displayed(), "The 'Today' button is not displayed"
-        assert not today_button.is_enabled(), "The 'Today' button is enabled"  # ! ERROR
+        today_button_disabled = self.auction_events.wait_element(LocatorAuctionEventsPage.TODAY_BUTTON_DISABLED)
+        assert today_button_disabled.is_displayed(), "The 'Today' button is not displayed"
+        assert today_button_disabled.is_enabled(), "The 'Today' button is enabled"
 
         # 3	Click on date, Calendar popup opened
         calendar = self.auction_events.wait_element(LocatorAuctionEventsPage.CALENDAR)
@@ -195,12 +195,14 @@ class TestAuctionEventsPage:
         assert calendar_value == next_date
 
         # 5	Check 'Today' button enables
+        today_button = self.auction_events.wait_element(LocatorAuctionEventsPage.TODAY_BUTTON_ENABLED)
         assert today_button.is_enabled(), "The 'Today' button is not enabled"
 
         # 6	Click on 'Today' button, check the button is not enabled
         today_button.click()
-        assert not today_button.is_enabled(), "The 'Today' button is enabled"  # ! ERROR
-        # assert today_button.is_enabled()
+
+        today_button_disabled = self.auction_events.wait_element(LocatorAuctionEventsPage.TODAY_BUTTON_DISABLED)
+        assert today_button_disabled.is_enabled(), "The 'Today' button is enabled"
 
         # 7	Click on > button
         right_arrow = self.auction_events.find_right_arrow()
@@ -213,6 +215,9 @@ class TestAuctionEventsPage:
         assert left_arrow.is_displayed(), "Left events block arrow is not displayed"
         assert left_arrow.is_enabled(), "Left events block arrow is not enabled"
         left_arrow.click()
+
+        today_button_disabled = self.auction_events.wait_element(LocatorAuctionEventsPage.TODAY_BUTTON_DISABLED)
+        assert today_button_disabled.is_enabled(), "The 'Today' button is enabled"
 
     def test_0009_01_check_6_days_blocks_shown_with_no_events_day(self):
         """Check that if no events scheduled, a text is shown.
@@ -242,15 +247,8 @@ class TestAuctionEventsPage:
         assert checkbox_limit_my_auctions.is_displayed(), "The checkbox 'Limit to My Auctions' is not dispalyed"
         checkbox_limit_my_auctions.click()
 
-        # days_events_block = self.auction_events.wait_all_elements(LocatorAuctionEventsPage.DAY_BLOCKS)  # ERROR
-        # time.sleep(3)
-        # assert len(days_events_block) == 6, (f"Mismatch between the expected number of days. "
-        #                                      f"Expected 6. Got {len(days_events_block)} number")
-
-        # 2 Check that if no events appears in specific day in scheduler, 'No Events Today' text is shown
         no_events_text = LocatorAuctionEventsPage.NO_EVENTS_TEXT
         no_events_in_block = self.auction_events.go_throw_events_lists_and_get_no_events_string()
-        # print(f"In block: {no_events_in_block}, Text: {no_events_text}")
         assert no_events_in_block == no_events_text
 
     # @pytest.mark.skip(reason="In work")
@@ -303,7 +301,7 @@ class TestAuctionEventsPage:
                         right_arrow = self.auction_events.find_right_arrow()
                         right_arrow.click()
 
-    @pytest.mark.skip(reason="In work. ElementNotInteractableException")
+    @pytest.mark.skip(reason="In work. TimeoutException")
     def test_0006_02_check_user_can_select_date_in_calendar(self):
         """Check schedule is changed when calendar date is chosen.
         Verify that date selection in calendar works correctly."""
@@ -312,16 +310,9 @@ class TestAuctionEventsPage:
         h1_auction_events = self.auction_events.wait_element(LocatorAuctionEventsPage.H1_AUCTION_EVENTS)
         assert h1_auction_events.is_displayed(), "'Auction Events' page is not opened. H1 is not found"
 
-        # # 2 Click on date. Calendar popup opened
-        # calendar_element = self.auction_events.wait_element(LocatorAuctionEventsPage.CALENDAR)
-        # calendar_element.click()
-        #
-        # calendar_picker = self.auction_events.search_element(LocatorAuctionEventsPage.CALENDAR_PICKER)
-        # assert calendar_picker.is_displayed(), "Calendar picker is not displayed"
-
         # 3 Get current date
         today_date = Calendar().get_today_date_without_format()
-        today_button = self.auction_events.wait_element(LocatorAuctionEventsPage.TODAY_BUTTON)
+        # today_button_disabled = self.auction_events.wait_element(LocatorAuctionEventsPage.TODAY_BUTTON_DISABLED)
         days_numbers = [1, -1, 10, -10, 30, -30, 365, -365]
 
         for number in days_numbers:
@@ -332,11 +323,7 @@ class TestAuctionEventsPage:
             assert next_date_in_calendar == next_day_calc_in_format, \
                 f"Expected: {next_day_calc_in_format}, Got: {next_date_in_calendar}"
 
-            today_button.click()
-            time.sleep(1)
+            today_button_enabled = self.auction_events.wait_element(LocatorAuctionEventsPage.TODAY_BUTTON_ENABLED)
+            today_button_enabled.click()
+            time.sleep(2)
 
-        # # Возвращаемся к сегодняшней дате и проверяем
-        # today_date_in_calendar = self.auction_events.select_target_day_number_in_calendar_picker(today_date, 0)
-        # today_date_in_format = Calendar().get_date_in_format(today_date)
-        # assert today_date_in_calendar == today_date_in_format, \
-        #     f"Expected: {today_date_in_format}, Got: {today_date_in_calendar}"
